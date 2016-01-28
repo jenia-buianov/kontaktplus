@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">KONTAKT PLUS</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_lang">Language</string>
+    <string name="action_reg">Registration</string>
+    <string name="action_log">Login</string>
+    <string name="action_exit">Exit</string>
+    <string-array name="entries">
+        <item>one</item>
+        <item>two</item>
+        <item>three</item>
+    </string-array>
+    <string-array name="entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    
+    <string-array name="language">
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
+    
+    <string name="Off_sinh" />
+    <string name="on_sinh" />
+    <string name="email">E-mail</string>
+    <string name="password_valur">Password</string>
+    <string name="number_text">Phone Number</string>
+    <string name="reg_text_button">REGISTRATION</string>
+    <string name="registration_vl">REGISTRATION</string>
+    <string name="save_button_text">SAVE</string>
+    <string name="change_title_text">CHANGE SETTINGS</string>
+    <string name="language_title">LANGUAGES</string>
+    <string name="english_title">English</string>
+    <string name="russian_titl">Russian</string>
+    <string name="enter_button">SING IN</string>
+    <string name="phone_val">Phone</string>
+    <string name="email_val">E-mail</string>
+    <string name="pass_val">Password</string>
+    <string name="reg_Valll">Register</string>
+    <string name="reg_vall">REGISTRATION</string>
+    <string name="login_button">SING IN</string>
+    <string name="autorize">Autorization</string>
+    <string name="total">PLEASE PRES BUTTON</string>
+
+</resources>

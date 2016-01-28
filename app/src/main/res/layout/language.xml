@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="@mipmap/background"
+    android:clickable="true"
+    android:id="@+id/back">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/language_title"
+        android:id="@+id/language_title"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/english_title"
+        android:id="@+id/radioButton"
+        android:layout_below="@+id/language_title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
+        android:enabled="true"
+        android:padding="7dp"
+        android:textColor="#f62e24"
+        android:textSize="20sp"
+        android:checked="true" />
+
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/russian_titl"
+        android:id="@+id/radioButton2"
+        android:enabled="true"
+        android:padding="7dp"
+        android:textColor="#f62e24"
+        android:textSize="20sp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:checked="false" />
+
+</RelativeLayout>
+

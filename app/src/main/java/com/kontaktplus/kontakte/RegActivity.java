@@ -1,0 +1,196 @@
+package com.kontaktplus.kontakte;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+
+public class RegActivity extends Activity{
+
+    public static final String APP_PREFERENCES = "myusers";
+    public static final String APP_PREFERENCES_COUNTER = "user_id";
+    private SharedPreferences mSettings;
+
+    Button regButton;
+    EditText mail;
+    EditText phone;
+    EditText pass;
+    String pass_val = "", email_val="", phone_val="";
+    String  res="";
+
+
+    // Connection to Internet /
+    Boolean isInternetPresent = false;
+    ConnectionDetector cd;
+
+    // Conection to Internet /
+    private static final String LOGTAG = "myLogs";
+
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.reg);
+
+
+        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
+        regButton = (Button) findViewById(R.id.reg_button);
+        phone = (EditText)findViewById(R.id.reg_phone);
+        mail = (EditText)findViewById(R.id.reg_mail);
+        pass = (EditText)findViewById(R.id.reg_pass);
+
+
+        regButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                cd = new ConnectionDetector(getApplicationContext());
+
+                String p = phone.getText().toString();
+                String m = mail.getText().toString();
+                String pp = pass.getText().toString();
+
+                if (p.length() > 8 && m.length() > 4 && pp.length() > 5 && !pp.equalsIgnoreCase("Password") && !p.equalsIgnoreCase("Phone") && !m.equalsIgnoreCase("E-mail")) {
+                    //Toast.makeText(RegActivity.this, "Ready to reg", Toast.LENGTH_LONG).show();
+                    pass_val = pp;
+                    email_val = m;
+                    phone_val = p;
+                    isInternetPresent = cd.ConnectingToInternet();
+
+                    //Проверяем Интернет статус:
+                    if (isInternetPresent) {
+                        //Интернет соединение есть
+                        //делаем HTTP запросы:
+
+                        try {
+                            sendRequest();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
+                        builder.setTitle("INTERNET ERORR")
+                                .setMessage("You don't have connection with internet")
+                                .setCancelable(false)
+                                .setNegativeButton("TRY AGAIN",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+
+
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
+                    builder.setTitle("REGISTRATION ERROR")
+                            .setMessage("You didn't introduce all dates")
+                            .setCancelable(false)
+                            .setNegativeButton("TRY AGAIN",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+                }
+
+            }
+        });
+    }
+    private void sendRequest() throws IOException {
+        //Log.d(LOGTAG, "sendRequest()");
+        String url = "http://kontaktplus.in/reg";
+        //Toast.makeText(RegActivity.this, "run", Toast.LENGTH_LONG).show();
+        //  Log.d(LOGTAG, "url");
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("phone", phone_val)
+                .add("pass", pass_val)
+                .add("email", email_val)
+
+                .build();
+        //Toast.makeText(RegActivity.this, "debug 1", Toast.LENGTH_LONG).show();
+        //    Log.d(LOGTAG, "Request Body");
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+        //Toast.makeText(RegActivity.this, "debug 2", Toast.LENGTH_LONG).show();
+        //      Log.d(LOGTAG, "Request Form");
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+                res = e.getMessage();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                res = response.body().string();
+                new_action(res);
+            }
+
+        });
+
+
+
+    }
+    public void new_action(String res)
+    {
+        if (res.length()==0||!isNumeric(res)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("RESPONSE")
+                    .setMessage(res)
+                    .setCancelable(false)
+                    .setNegativeButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }else {
+
+            SharedPreferences.Editor editor = mSettings.edit();
+            editor.putString(APP_PREFERENCES_COUNTER, res);
+            editor.apply();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+        }
+    }
+
+    public static boolean isNumeric(String str)
+    {
+        for (char c : str.toCharArray())
+        {
+            if (!Character.isDigit(c)) return false;
+        }
+        return true;
+    }
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="ntf"
+        android:summary="Description of notification"
+        android:title="Notification">
+    </CheckBoxPreference>
+    <ListPreference
+        android:entries="@array/language"
+        android:entryValues="@array/entry_values"
+        android:key="Lang"
+        android:summary="Description of lenguage"
+        android:title="Language">
+    </ListPreference>
+    <PreferenceScreen
+        android:key="screen"
+        android:summary="Description of screen"
+        android:title="Screen">
+        <PreferenceCategory
+            android:key="categ1"
+            android:summary="Description of category 1"
+            android:title="Select">
+            <CheckBoxPreference
+                android:key="chb1"
+                android:summary="Description of phone book"
+                android:title="Phone Book">
+            </CheckBoxPreference>
+            <CheckBoxPreference
+                android:key="chb2"
+                android:summary="Description of SMS"
+                android:title="SMS">
+            </CheckBoxPreference>
+        </PreferenceCategory>
+    </PreferenceScreen>
+</PreferenceScreen>
+</menu>

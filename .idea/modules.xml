@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/KONTAKTE+.iml" filepath="$PROJECT_DIR$/KONTAKTE+.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/layoutfiles/layoutfiles.iml" filepath="$PROJECT_DIR$/layoutfiles/layoutfiles.iml" />
+      <module fileurl="file://$PROJECT_DIR$/layoutfiles2/layoutfiles2.iml" filepath="$PROJECT_DIR$/layoutfiles2/layoutfiles2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vievs/vievs.iml" filepath="$PROJECT_DIR$/vievs/vievs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/viewbyid/viewbyid.iml" filepath="$PROJECT_DIR$/viewbyid/viewbyid.iml" />
+    </modules>
+  </component>
+</project>

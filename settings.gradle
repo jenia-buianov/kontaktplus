@@ -1,0 +1,1 @@
+include ':app', ':test', ':vievs', ':layoutfiles', ':layoutfiles2', ':viewbyid'
