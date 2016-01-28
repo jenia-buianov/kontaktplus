@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LoginActivity"
@@ -13,18 +13,26 @@
         android:visibility="invisible"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/autorize"
-            android:id="@+id/textView"
-            android:textAlignment="center"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/autorize"
+        android:id="@+id/textView"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <EditText
             android:layout_width="fill_parent"
@@ -58,8 +66,8 @@
             android:padding="7dp"
             android:hint="Password"/>
 
-    <Button
-        android:layout_width="wrap_content"
+            <Button
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="@string/login_button"
         android:id="@+id/login_button"
@@ -70,29 +78,24 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:layout_alignParentEnd="false"
-        android:layout_marginRight="20dp" />
+                android:layout_marginTop="79dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:text="@string/reg_text_button"
-            android:id="@+id/reg_button"
-            android:background="#f62e24"
-            android:padding="15dp"
-            android:textColor="#ffffff"
-            android:layout_marginTop="65dp"
-            android:layout_below="@+id/pass"
-            android:layout_alignRight="@+id/pass"
-            android:layout_alignEnd="@+id/pass" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="@string/reg_text_button"
+                android:id="@+id/reg_button"
+                android:background="#f62e24"
+                android:padding="15dp"
+                android:textColor="#ffffff"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/pass"
+                android:layout_alignRight="@+id/pass"
+                android:layout_alignEnd="@+id/pass"
+                android:layout_gravity="top|right" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Русский текст"
-        android:id="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/progressBar" />
-
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
 
 

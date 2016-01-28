@@ -7,9 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -119,6 +122,11 @@ public class RegActivity extends Activity{
     }
     private void sendRequest() throws IOException {
         //Log.d(LOGTAG, "sendRequest()");
+        TextView regtext = (TextView) findViewById(R.id.textView);
+        regtext.setVisibility(TextView.INVISIBLE);
+
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
         String url = "http://kontaktplus.in/reg";
         //Toast.makeText(RegActivity.this, "run", Toast.LENGTH_LONG).show();
         //  Log.d(LOGTAG, "url");
@@ -150,39 +158,49 @@ public class RegActivity extends Activity{
             @Override
             public void onResponse(Response response) throws IOException {
                 res = response.body().string();
-                new_action(res);
+
+                if (res.length()==0||!isNumeric(res)) {
+                    Log.d("Error ", res);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+
+                            TextView regtext = (TextView) findViewById(R.id.textView);
+                            regtext.setVisibility(TextView.VISIBLE);
+
+                            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                            progressBar.setVisibility(ProgressBar.INVISIBLE);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
+                            builder.setTitle("RASPONSE")
+                                    .setMessage(res)
+                                    .setCancelable(false)
+                                    .setNegativeButton("TRY AGAIN",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+                                                }
+                                            });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+                    });
+
+
+
+                }else {
+                    SharedPreferences.Editor editor = mSettings.edit();
+                    editor.putString(APP_PREFERENCES_COUNTER, res);
+                    editor.apply();
+                    Intent intent = new Intent(RegActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                    startActivity(intent);
+                }
             }
 
         });
 
 
 
-    }
-    public void new_action(String res)
-    {
-        if (res.length()==0||!isNumeric(res)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("RESPONSE")
-                    .setMessage(res)
-                    .setCancelable(false)
-                    .setNegativeButton("OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-            AlertDialog alert = builder.create();
-            alert.show();
-        }else {
-
-            SharedPreferences.Editor editor = mSettings.edit();
-            editor.putString(APP_PREFERENCES_COUNTER, res);
-            editor.apply();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            startActivity(intent);
-        }
     }
 
     public static boolean isNumeric(String str)

@@ -12,6 +12,15 @@
         android:visibility="invisible"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +31,9 @@
         android:textOff="@string/Off_sinh"
         android:textOn="@string/on_sinh"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp" />
     <TextView
         android:id="@+id/tvInfo"
         android:layout_width="wrap_content"
@@ -30,20 +41,22 @@
         android:text="">
     </TextView>
 
+    </LinearLayout>
+    </ScrollView>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/total"
-        android:layout_below="@+id/sinhbutton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
         android:background="#f62e24"
         android:padding="10dp"
         android:textColor="#ffffff"
         android:enabled="false"
         android:visibility="visible"
-        android:text="@string/total" />
-
+        android:text="Please press the button"
+        android:layout_below="@+id/scrollView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
 </RelativeLayout>
 

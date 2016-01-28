@@ -43,5 +43,6 @@
     <string name="login_button">SING IN</string>
     <string name="autorize">Autorization</string>
     <string name="total">PLEASE PRES BUTTON</string>
+    <string name="uploading">Uploading</string>
 
 </resources>
