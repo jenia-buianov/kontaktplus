@@ -24,12 +24,14 @@
             <CheckBoxPreference
                 android:key="chb1"
                 android:summary="Description of phone book"
-                android:title="Phone Book">
+                android:title="Phone Book"
+                android:defaultValue="true">
             </CheckBoxPreference>
             <CheckBoxPreference
                 android:key="chb2"
                 android:summary="Description of SMS"
-                android:title="SMS">
+                android:title="SMS"
+                android:defaultValue="true">
             </CheckBoxPreference>
         </PreferenceCategory>
     </PreferenceScreen>

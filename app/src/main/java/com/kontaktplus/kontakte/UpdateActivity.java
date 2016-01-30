@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -28,7 +29,7 @@ public class UpdateActivity extends Activity{
     SharedPreferences sp;
     String user_id=null,res="";
     TextView total;
-int update=0;
+    int update=0, tries = 0;
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
     private SharedPreferences mSettings;
@@ -39,10 +40,13 @@ int update=0;
     //int count=0;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.update_activity);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
             // Получаем число из настроек
-           user_id = mSettings.getString(APP_PREFERENCES_COUNTER,"");
+            user_id = mSettings.getString(APP_PREFERENCES_COUNTER,"");
             if (user_id.length()==0)
                 user_id = null;
         }
@@ -52,22 +56,26 @@ int update=0;
             startActivity(intent);
         }
 
-        setContentView(R.layout.update);
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+        total = (TextView) findViewById(R.id.total);
+        total.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        try {
+                try {
+                    makeDB();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        //setContentView(R.layout.update_activity);
 
-            //Thread.sleep(1000);
-            makeDB();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-            // получаем SharedPreferences, которое работает с файлом настроек
-            sp = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // получаем SharedPreferences, которое работает с файлом настроек
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-}
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -88,9 +96,81 @@ int update=0;
         editor.putString(APP_PREFERENCES_COUNTER, user_id);
         editor.apply();
     }
-    public void makeDB() throws InterruptedException {
+    public int inserttext(String str)
+    {
+        TextView regtext = (TextView) findViewById(R.id.total);
+        regtext.append(str + "\n");
+        return 1;
+
+    }
+    public void viewContacts(int update, int count_) throws IOException {
+        ContentResolver cr = getContentResolver();
+        //String phoneNumbe;
+        final int[] count = {0};
+        boolean bool= false;
+        final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        while (phones.moveToNext()&&count[0]<count_) {
+            tries++;
+            final String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            //phoneNM = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY));
+            bool = sendRequest(name, phoneNumber, update);
+            inserttext(count_+". "+name+" was UPDATED");
+            Log.d("view", count_+". "+name+" was Updated");
+            count[0]++;
+        }
+
+    }
+    private boolean sendRequest(String name, String phoneNumber, int update) throws IOException {
+        final boolean[] bl = {false};
+        String url1 = "http://kontaktplus.in/getm";
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("uid", user_id)
+                .add("name", name)
+                .add("upd", String.valueOf(update))
+                .add("phone", phoneNumber)
+
+                .build();
+        Request request = new Request.Builder()
+                .url(url1)
+                .post(formBody)
+                .build();
+
+        //Log.d("MyLog","-------------------------");
+        Call call = client.newCall(request);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        call.enqueue(new com.squareup.okhttp.Callback() {
+            //Thread.sleep(1000);                 //1000 milliseconds is one second.
+
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+                res = e.getMessage();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                res = response.body().string();
+                bl[0] = true;
+                Log.d("send_req","YES");
+                //Log.d("MyLog", name+ "-----------"+res);
+                //count[0]++;
 
 
+            }
+
+        });
+return bl[0];
+
+    }
+
+    public int makeDB() throws InterruptedException {
 
         TextView regtext = (TextView) findViewById(R.id.total);
         regtext.setText("Loading");
@@ -102,7 +182,7 @@ int update=0;
         final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         if (phones.getCount()>0)
         {
-
+            inserttext(String.valueOf(phones.getCount()));
             String url = "http://kontaktplus.in/getm2";
             OkHttpClient client = new OkHttpClient();
             RequestBody formBody = new FormEncodingBuilder()
@@ -142,65 +222,25 @@ int update=0;
 
         if (update>0)
         {
-            while (phones.moveToNext()&&count[0]<phones.getCount())
-            {
-                final String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                //phoneNM = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY));
-
-                String url1 = "http://kontaktplus.in/getm";
-                OkHttpClient client = new OkHttpClient();
-                RequestBody formBody = new FormEncodingBuilder()
-                        .add("uid", user_id)
-                        .add("name", name)
-                        .add("upd", String.valueOf(update))
-                        .add("phone", phoneNumber)
-
-                        .build();
-                Request request = new Request.Builder()
-                        .url(url1)
-                        .post(formBody)
-                        .build();
-
-                //Log.d("MyLog","-------------------------");
-                Call call = client.newCall(request);
-                Thread.sleep(1000);
-
-                call.enqueue(new com.squareup.okhttp.Callback() {
-                    //Thread.sleep(1000);                 //1000 milliseconds is one second.
-
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-
-                        res = e.getMessage();
-                    }
-
-                    @Override
-                    public void onResponse(Response response) throws IOException {
-                        res = response.body().string();
-                        runOnUiThread(new Runnable() {
-                                          public void run() {
-
-                                              TextView regtext = (TextView) findViewById(R.id.total);
-                                              regtext.setText("UPDATE " + name);
-                                          }
-                                      });
-                        Log.d("MyLog", count[0] + ": " + name + "-----------"+res);
-                        count[0]++;
-
-                    }
-
-                });
-
-
+            tries++;
+            try {
+                viewContacts(update, phones.getCount());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            return tries;
+
         }else{
             Log.d("MyLog", "Update can't find");
             makeDB();
-            }
-            phones.close();// close cursor
+            tries++;
+            //return tries;
+
+        }
+        phones.close();// close cursor
         //Toast.makeText(MainActivity.this, count_c, Toast.LENGTH_SHORT).show();
         //readDB();
+        return tries;
     }
     public static boolean isNumeric(String str)
     {

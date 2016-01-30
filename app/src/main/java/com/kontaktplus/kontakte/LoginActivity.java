@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -196,7 +195,7 @@ public class LoginActivity extends Activity {
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //intent.putExtra("user_", res);
+                    intent.putExtra("user_", res);
 
 
                     startActivity(intent);
@@ -209,28 +208,6 @@ public class LoginActivity extends Activity {
 
 
     }
-    public void new_action(String res)
-    {
-        if (res.length()==0||!isNumeric(res)) {
-            Log.d("Error ", res);
-            Toast.makeText(LoginActivity.this, res, Toast.LENGTH_SHORT).show();
-
-        }else {
-            SharedPreferences.Editor editor = mSettings.edit();
-            editor.putString(APP_PREFERENCES_COUNTER, res);
-            //editor.apply();
-            editor.commit();
-
-
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //intent.putExtra("user_", res);
-
-
-            startActivity(intent);
-        }
-    }
-
 
 
 

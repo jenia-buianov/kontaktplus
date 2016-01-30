@@ -21,7 +21,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <ToggleButton
+
+        <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sinhronize"
@@ -34,29 +35,41 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp" />
+
+
     <TextView
         android:id="@+id/tvInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="">
     </TextView>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/total"
+            android:background="#f62e24"
+            android:padding="10dp"
+            android:textColor="#ffffff"
+            android:enabled="false"
+            android:visibility="visible"
+            android:text="Please press the button"
+            android:layout_below="@+id/scrollView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal" />
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="#ffffff"
+            android:id="@+id/upd"
+            android:visibility="visible"
+            android:padding="10dp"
+            android:text="">
+        </TextView>
     </LinearLayout>
     </ScrollView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/total"
-        android:background="#f62e24"
-        android:padding="10dp"
-        android:textColor="#ffffff"
-        android:enabled="false"
-        android:visibility="visible"
-        android:text="Please press the button"
-        android:layout_below="@+id/scrollView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
 </RelativeLayout>
 

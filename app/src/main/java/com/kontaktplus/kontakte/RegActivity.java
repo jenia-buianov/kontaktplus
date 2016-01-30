@@ -120,6 +120,7 @@ public class RegActivity extends Activity{
             }
         });
     }
+
     private void sendRequest() throws IOException {
         //Log.d(LOGTAG, "sendRequest()");
         TextView regtext = (TextView) findViewById(R.id.textView);

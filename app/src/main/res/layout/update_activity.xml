@@ -39,7 +39,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Find"
+                android:text="Click here pleasa for beginig"
+                android:textColor="#ffffff"
                 android:id="@+id/total"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp" />

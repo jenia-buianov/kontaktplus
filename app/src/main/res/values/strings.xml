@@ -44,5 +44,8 @@
     <string name="autorize">Autorization</string>
     <string name="total">PLEASE PRES BUTTON</string>
     <string name="uploading">Uploading</string>
+    <string name="title_activity_update">UpdateActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>
