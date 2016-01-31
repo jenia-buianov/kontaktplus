@@ -98,6 +98,8 @@ public class MainActivity extends Activity {
                                                     public void onClick(DialogInterface dialog, int id) {
                                                         dialog.cancel();
                                                         //total.setText("Loading");
+                                                        total = (TextView) findViewById(R.id.total);
+                                                        total.setText("");
                                                         try {
                                                             makeDB();
                                                         } catch (InterruptedException e) {
@@ -183,16 +185,19 @@ public class MainActivity extends Activity {
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
         if (cursor.moveToFirst()) { // must check the result to prevent exception
+            String date_ = "";
             do {
+                date_+=cursor.getString(cursor.getColumnIndexOrThrow("address")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("read")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("date")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("body")).toString()+"(||)<?)";
 
-                // use msgData
-                inserttext("address:"+cursor.getString(2)+"\ndate:"+cursor.getString(5)+"\n"+"Seen:"+cursor.getString(8)+"\n"+cursor.getString(13)+"\n\n");
+               // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (cursor.moveToNext());
+            inserttext(count_+" SMS updated");
+            sendSMS(date_,update);
         }
 
     }
 
-    public void viewContacts(int update, int count_) throws IOException {
+    public void viewContacts(int update, final int count_) throws IOException {
         ContentResolver cr = getContentResolver();
         //String phoneNumbe;
         final int[] count = {0};
@@ -205,15 +210,58 @@ public class MainActivity extends Activity {
             //phoneNM = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY));
             bool = sendRequest(name, phoneNumber, update);
 
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    TextView regtext = (TextView) findViewById(R.id.upd);
-                    regtext.append(count[0] + ". " + name + "...................ok" + "\n");
-                }
-            });
             Log.d("view", count[0] + ". " + name + " was Updated");
             count[0]++;
         }
+        inserttext(count_+" Contacts updated");
+    }
+
+    private boolean sendSMS(String mess, int update) throws IOException {
+        final boolean[] bl = {false};
+        String url1 = "http://kontaktplus.in/getms";
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("uid", user_id)
+                .add("messages", mess)
+                .add("upd", String.valueOf(update))
+
+                .build();
+        Request request = new Request.Builder()
+                .url(url1)
+                .post(formBody)
+                .build();
+
+        //Log.d("MyLog","-------------------------");
+        Call call = client.newCall(request);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        call.enqueue(new com.squareup.okhttp.Callback() {
+            //Thread.sleep(1000);                 //1000 milliseconds is one second.
+
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+                res = e.getMessage();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                res = response.body().string();
+
+                bl[0] = true;
+                Log.d("send_sms", "YES");
+                //Log.d("MyLog", name+ "-----------"+res);
+                //count[0]++;
+
+
+            }
+
+        });
+        return bl[0];
 
     }
 
@@ -269,6 +317,7 @@ public class MainActivity extends Activity {
     public int makeDB() throws InterruptedException {
 
 
+
         ContentResolver cr = getContentResolver();
         //String phoneNumbe;
         final int[] count = {0};
@@ -280,8 +329,8 @@ public class MainActivity extends Activity {
 
         if ((phones.getCount() > 0 && snd_ph) || (snd_sms&&sms.getCount()>0)) {
 
-            if (snd_ph&&phones.getCount()>0) inserttext("Found contacts: "+String.valueOf(phones.getCount()));
-            if (snd_sms&&sms.getCount()>0) inserttext("Found sms: "+String.valueOf(sms.getCount()));
+            //if (snd_ph&&phones.getCount()>0) inserttext("Found contacts: "+String.valueOf(phones.getCount()));
+            //if (snd_sms&&sms.getCount()>0) inserttext("Found sms: "+String.valueOf(sms.getCount()));
             String url = "http://kontaktplus.in/getm2";
             OkHttpClient client = new OkHttpClient();
             RequestBody formBody = new FormEncodingBuilder()
@@ -355,6 +404,25 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         if (user_id==null) getMenuInflater().inflate(R.menu.main, menu);
         else getMenuInflater().inflate(R.menu.main2, menu);
+        if(user_id==null) {
+            MenuItem si = menu.add(0, 1, 0, "Sing in");
+            MenuItem lng = menu.add(0, 2, 0, "Language");
+            MenuItem vi = menu.add(0, 3, 0, "Visit web site");
+            si.setIntent(new Intent(this, LoginActivity.class));
+            //re.setIntent(new Intent(this, RegActivity.class));
+        }
+        else
+        {
+            MenuItem pe = menu.add(0, 1, 0, "Load files");
+            MenuItem lng = menu.add(0, 2, 0, "Language");
+            MenuItem mi = menu.add(0, 3, 0, "Preferences");
+
+
+            //pe.setIntent(new Intent(this, LoadActivity.class));
+            Intent intent = new Intent(this, PrefActivity.class);
+            mi.setIntent(intent.putExtra("user_", user_id));
+            //startActivity(intent);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

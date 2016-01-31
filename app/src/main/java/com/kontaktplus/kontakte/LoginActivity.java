@@ -217,6 +217,10 @@ public class LoginActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
+        MenuItem si = menu.add(0, 1, 0, "Sing in");
+        MenuItem lng = menu.add(0, 2, 0, "Language");
+        MenuItem vi = menu.add(0, 3, 0, "Visit web site");
+        si.setIntent(new Intent(this, LoginActivity.class));
         return super.onCreateOptionsMenu(menu);
     }
 
