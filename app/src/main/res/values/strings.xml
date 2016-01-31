@@ -52,5 +52,7 @@
     <string name="item2">Item2</string>
     <string name="item3">Item3</string>
     <string name="item4">Item4</string>
+    <string name="title_activity_notific">NotificActivity</string>
+    <string name="title_activity_load">Load</string>
 
 </resources>

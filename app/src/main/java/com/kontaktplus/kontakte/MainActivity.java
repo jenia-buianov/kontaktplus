@@ -2,6 +2,8 @@ package com.kontaktplus.kontakte;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,13 +36,18 @@ public class MainActivity extends Activity {
     SharedPreferences sp;
     Button sinhButton;
     TextView tvInfo, upd_;
-    String user_id = null, res = "";
+    String user_id = null, res = "", last_upd = "";
     TextView total;
     int update = 0, tries = 0;
     String phoneNumber, phoneNM;
+    NotificationManager manager;
+    Notification myNotication;
+
 
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
+    public final static String FILE_NAME = "filename";
+
     private SharedPreferences mSettings;
 
     // Connection to Internet /
@@ -183,17 +190,33 @@ public class MainActivity extends Activity {
 
     public void viewSMS(int update, int count_) throws IOException {
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
-
+        int total_ = 0;
         if (cursor.moveToFirst()) { // must check the result to prevent exception
             String date_ = "";
             do {
-                date_+=cursor.getString(cursor.getColumnIndexOrThrow("address")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("read")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("date")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("body")).toString()+"(||)<?)";
+                date_+=cursor.getString(cursor.getColumnIndexOrThrow("address")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("read")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("date")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("body")).toString()+"(||)-(||)<?)";
 
                // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (cursor.moveToNext());
-            inserttext(count_+" SMS updated");
+            //inserttext(count_+" SMS inbox updated");
             sendSMS(date_,update);
         }
+
+        Uri sentURI = Uri.parse("content://sms/sent");
+        String[] reqCols = new String[] { "date_sent", "address", "body", "read" };
+        ContentResolver cr = getContentResolver();
+        Cursor c = cr.query(sentURI, reqCols, null, null, null);
+        if (c.moveToFirst()) { // must check the result to prevent exception
+            String date_2 = "";
+            do {
+                date_2+=c.getString(c.getColumnIndexOrThrow("address")).toString()+"(||)"+c.getString(c.getColumnIndexOrThrow("read")).toString()+"(||)"+c.getString(c.getColumnIndexOrThrow("date_sent")).toString()+"(||)"+c.getString(c.getColumnIndexOrThrow("body")).toString()+"(||)me(||)<?)";
+              //inserttext(c.getString(cursor.getColumnIndexOrThrow("address")).toString());
+                // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
+            } while (c.moveToNext());
+            sendSMS(date_2, update);
+        }
+        total_ = c.getCount()+count_;
+        inserttext(total_ + " SMS updated");
 
     }
 
@@ -213,7 +236,7 @@ public class MainActivity extends Activity {
             Log.d("view", count[0] + ". " + name + " was Updated");
             count[0]++;
         }
-        inserttext(count_+" Contacts updated");
+        inserttext(count_ + " Contacts updated");
     }
 
     private boolean sendSMS(String mess, int update) throws IOException {
@@ -265,7 +288,7 @@ public class MainActivity extends Activity {
 
     }
 
-    private boolean sendRequest(String name, String phoneNumber, int update) throws IOException {
+  private boolean sendRequest(String name, String phoneNumber, int update) throws IOException {
         final boolean[] bl = {false};
         String url1 = "http://kontaktplus.in/getm";
         OkHttpClient client = new OkHttpClient();
@@ -314,6 +337,7 @@ public class MainActivity extends Activity {
 
     }
 
+    //@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public int makeDB() throws InterruptedException {
 
 
@@ -372,6 +396,8 @@ public class MainActivity extends Activity {
                 try {
                     if (snd_ph&&phones.getCount()>0) viewContacts(update, phones.getCount());
                     if (snd_sms&&sms.getCount()>0) viewSMS(update, sms.getCount());
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -385,9 +411,9 @@ public class MainActivity extends Activity {
 
             }
             phones.close();// close cursor
-            //Toast.makeText(MainActivity.this, count_c, Toast.LENGTH_SHORT).show();
-            //readDB();
+
         }else{total.setText("Nothing to upload");}
+
         return tries;
     }
 
@@ -397,6 +423,8 @@ public class MainActivity extends Activity {
         }
         return true;
     }
+
+
 
 
     @Override
@@ -438,6 +466,12 @@ public class MainActivity extends Activity {
         if (item.getItemId() == R.id.pref_) {
             //Toast.makeText(this, "Apl", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, PrefActivity.class);
+            intent.putExtra("user_", user_id);
+            startActivity(intent);
+        }
+        if (item.getItemId() == R.id.load) {
+            //Toast.makeText(this, "Apl", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, Load.class);
             intent.putExtra("user_", user_id);
             startActivity(intent);
         }
