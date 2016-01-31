@@ -54,5 +54,14 @@
     <string name="item4">Item4</string>
     <string name="title_activity_notific">NotificActivity</string>
     <string name="title_activity_load">Load</string>
+    <string name="please_press">Please press the button for start</string>
+    <string name="load_updates">Load updates</string>
+    <string name="warnin_update">Please select your version for update. Remeber that all your dates will be deleted and rewrited by the dates from server</string>
+    <string name="autorize_">Autorization</string>
+    <string name="reg_mail">Email</string>
+    <string name="password_">Password</string>
+    <string name="registartion">Registration</string>
+    <string name="wrning_reg">Be carefull! Making registration your contacts and sms will be send t othe server. This data is absolutly confidience</string>
+    <string name="dellcont">Delete Contacts and write from server</string>
 
 </resources>

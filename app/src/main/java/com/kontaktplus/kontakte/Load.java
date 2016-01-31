@@ -1,15 +1,18 @@
 package com.kontaktplus.kontakte;
 
 import android.app.Activity;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -30,6 +34,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Load extends Activity {
 
@@ -133,7 +138,7 @@ public class Load extends Activity {
             valueTV.setGravity(Gravity.CENTER_HORIZONTAL);
             valueTV.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
             //valueTV.setMargins(10, 10, 10, 0);
-            final int  vk=k;
+            final int  vk=k+1;
             valueTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,6 +169,7 @@ public class Load extends Activity {
     private boolean update(int update) throws IOException {
         final boolean[] bl = {false};
         String url1 = "http://kontaktplus.in/get_ct";
+        Log.d("UPDATE_", String.valueOf(update));
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormEncodingBuilder()
                 .add("uid", user_id)
@@ -197,37 +203,131 @@ public class Load extends Activity {
                 res = response.body().string();
                 bl[0] = true;
                 Log.d("send_req", "YES");
+                CheckBox rewrite = (CheckBox) findViewById(R.id.checkBox);
+                if (rewrite.isChecked()) {
+                    ContentResolver cr = getContentResolver();
 
-                ContentResolver cr = getContentResolver();
                 Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                         null, null, null, null);
                 while (cur.moveToNext()) {
-                    try{
+                    try {
                         String lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
                         Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
                         cr.delete(uri, null, null);
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         System.out.println(e.getStackTrace());
+                    }finally {
+                        cur.close();
                     }
+
                 }
 
+
+                    Cursor c = getApplicationContext().getContentResolver().query(Uri.parse("content://sms/"), null, null, null,null);
+                    try {
+                        while (c.moveToNext()) {
+                            int id = c.getInt(0);
+                            getApplicationContext().getContentResolver().delete(Uri.parse("content://sms/" + id), null, null);
+                        }
+
+                    }catch(Exception e){
+                        Log.e(this.toString(),"Error deleting sms",e);
+                    }finally {
+                        c.close();
+                    }
+            }
+                Log.d("RESULT",res);
+
                 String[] the_whole_body = res.split("_!_");
-                String[] contacts = the_whole_body[0].split("(//)");
+                String body = the_whole_body[0].toString();
+                String sms_ = the_whole_body[1].toString();
+                String[] contacts = body.split("_!-!");
+                String[] smses = sms_.split("_!-!");
+                //Log.d("Body", body);
+
                 int k = 0;
                 while(k<contacts.length-1) {
-                    String[] contact = contacts[k].split("(||)");
-                    ContentValues values = new ContentValues();
+                    Log.d("Conts",contacts[k].toString());
+                    String bd = contacts[k].toString();
+                    String[] contact = bd.split("!-_!");
+                    String name = contact[0].toString();
+                    String phone = contact[1].toString();
+                    Log.d("contact",name);
+                    //ContentValues values = new ContentValues();
                     //values.put(ContactsContract.Data.RAW_CONTACT_ID, 001);
-                    values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-                    values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, contact[1]);
-                    values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
-                    values.put(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, contact[0]);
-                    Uri dataUri = getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
+                    //values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+                    //values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, contact[1]);
+                    //values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
+                    //values.put(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, contact[0]);
+                    //Uri dataUri = getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
+
+                    ArrayList <ContentProviderOperation> ops = new ArrayList< ContentProviderOperation >();
+
+                    ops.add(ContentProviderOperation.newInsert(
+                            ContactsContract.RawContacts.CONTENT_URI)
+                            .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                            .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                            .build());
+
+
+                        ops.add(ContentProviderOperation.newInsert(
+                                ContactsContract.Data.CONTENT_URI)
+                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                .withValue(ContactsContract.Data.MIMETYPE,
+                                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                                .withValue(
+                                        ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                                        name).build());
+
+
+                    //------------------------------------------------------ Mobile Number
+                    ops.add(ContentProviderOperation.
+                            newInsert(ContactsContract.Data.CONTENT_URI)
+                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE,
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                            .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                            .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                                    ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                            .build());
+                    try {
+                        getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    } catch (OperationApplicationException e) {
+                        e.printStackTrace();
+                    }
                     k++;
                 }
-            }
+                int m = 0;
+                while(m<smses.length-1) {
+                    String bd = smses[k].toString();
+                    String[] message = bd.split("!-_!");
+                    String from = message[0].toString();
+                    String phone = message[1].toString();
+                    String ms = message[2].toString();
+                    String dt = message[3].toString();
+                    String seen = message[4].toString();
+                    String snd = "";
+                    Log.d("SendMS",ms);
+
+
+                    if (from=="me") {snd = "sent";} else {snd = "inbox";}
+                    Uri uri = Uri.parse("content://sms/"+snd);
+                    ContentValues cv2 = new ContentValues();
+                    cv2.put("address", phone);
+                    cv2.put("date", dt);
+                    cv2.put("read", seen);
+                    cv2.put("type", 2);
+                    cv2.put("body", ms);
+                    getContentResolver().insert(uri, cv2);
+                    /** This is very important line to solve the problem */
+                    //getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
+                    cv2.clear();
+
+                }
+
+                }
 
 
 
@@ -241,25 +341,7 @@ public class Load extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         if (user_id==null) getMenuInflater().inflate(R.menu.main, menu);
         else getMenuInflater().inflate(R.menu.main2, menu);
-        if(user_id==null) {
-            MenuItem si = menu.add(0, 1, 0, "Sing in");
-            MenuItem lng = menu.add(0, 2, 0, "Language");
-            MenuItem vi = menu.add(0, 3, 0, "Visit web site");
-            si.setIntent(new Intent(this, LoginActivity.class));
-            //re.setIntent(new Intent(this, RegActivity.class));
-        }
-        else
-        {
-            MenuItem pe = menu.add(0, 1, 0, "Load files");
-            MenuItem lng = menu.add(0, 2, 0, "Language");
-            MenuItem mi = menu.add(0, 3, 0, "Preferences");
 
-
-            //pe.setIntent(new Intent(this, LoadActivity.class));
-            Intent intent = new Intent(this, PrefActivity.class);
-            mi.setIntent(intent.putExtra("user_", user_id));
-            //startActivity(intent);
-        }
         return super.onCreateOptionsMenu(menu);
     }
 

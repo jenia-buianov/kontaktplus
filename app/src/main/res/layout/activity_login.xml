@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Autorization"
+                android:text="@string/autorize_"
                 android:id="@+id/textView2"
                 android:textAlignment="center"
                 android:textColor="#000"
@@ -49,7 +49,7 @@
                 android:layout_alignParentEnd="true"
                 style="@style/style_file"
                 android:padding="7dp"
-                android:hint="Email"
+                android:hint="@string/reg_mail"
                 android:textColor="#fff"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp" />
@@ -66,7 +66,7 @@
                 android:layout_marginTop="43dp"
                 android:background="@mipmap/inp"
                 android:padding="7dp"
-                android:hint="Password"
+                android:hint="@string/pass_val"
                 android:textColor="#fff"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp" />

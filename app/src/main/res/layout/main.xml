@@ -58,9 +58,7 @@
             android:textColor="#ffffff"
             android:enabled="false"
             android:visibility="visible"
-            android:text="Please press the button"
-            android:layout_below="@+id/scrollView"
-            android:layout_centerHorizontal="true"
+            android:text="@string/please_press"
             android:layout_marginTop="30dp"
             android:layout_gravity="center_horizontal" />
         <TextView

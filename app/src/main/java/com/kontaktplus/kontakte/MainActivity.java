@@ -105,8 +105,6 @@ public class MainActivity extends Activity {
                                                     public void onClick(DialogInterface dialog, int id) {
                                                         dialog.cancel();
                                                         //total.setText("Loading");
-                                                        total = (TextView) findViewById(R.id.total);
-                                                        total.setText("");
                                                         try {
                                                             makeDB();
                                                         } catch (InterruptedException e) {
@@ -432,25 +430,7 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         if (user_id==null) getMenuInflater().inflate(R.menu.main, menu);
         else getMenuInflater().inflate(R.menu.main2, menu);
-        if(user_id==null) {
-            MenuItem si = menu.add(0, 1, 0, "Sing in");
-            MenuItem lng = menu.add(0, 2, 0, "Language");
-            MenuItem vi = menu.add(0, 3, 0, "Visit web site");
-            si.setIntent(new Intent(this, LoginActivity.class));
-            //re.setIntent(new Intent(this, RegActivity.class));
-        }
-        else
-        {
-            MenuItem pe = menu.add(0, 1, 0, "Load files");
-            MenuItem lng = menu.add(0, 2, 0, "Language");
-            MenuItem mi = menu.add(0, 3, 0, "Preferences");
 
-
-            //pe.setIntent(new Intent(this, LoadActivity.class));
-            Intent intent = new Intent(this, PrefActivity.class);
-            mi.setIntent(intent.putExtra("user_", user_id));
-            //startActivity(intent);
-        }
         return super.onCreateOptionsMenu(menu);
     }
 
