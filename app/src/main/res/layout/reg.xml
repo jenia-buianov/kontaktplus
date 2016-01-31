@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
-    android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".RegActivity"
-    android:background="@mipmap/background"
+    android:layout_height="fill_parent"
+    android:background="#fff"
     android:clickable="true"
     android:id="@+id/back">
 
@@ -22,7 +19,7 @@
         android:text="@string/reg_vall"
         android:id="@+id/textView"
         android:textAlignment="center"
-        android:textColor="#ffffff"
+        android:textColor="#000"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -36,13 +33,49 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         style="@style/style_file">
-    <EditText
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            android:background="@mipmap/another_background">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Registration"
+                android:id="@+id/textView2"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Be carefull! Making registration your contacts and sms will be send t othe server. This data is absolutly confidience"
+                android:id="@+id/textView"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+        <EditText
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/reg_phone"
-        android:background="#ffffff"
+        android:background="@mipmap/inp"
         android:width="100dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -53,7 +86,9 @@
         style="@style/style_file"
         android:padding="7dp"
 
-        android:hint="@string/phone_val"/>
+        android:hint="@string/phone_val"
+        android:textColor="#fff"
+        android:textColorHint="#666" />
 
 
 
@@ -63,14 +98,16 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/reg_mail"
-        android:background="#ffffff"
+        android:background="@mipmap/inp"
         android:hint="@string/email_val"
         android:layout_below="@+id/reg_phone"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="35dp"
         style="@style/style_file"
-        android:padding="7dp" />
+        android:padding="7dp"
+        android:textColor="#fff"
+        android:textColorHint="#666" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -84,10 +121,12 @@
         android:id="@+id/reg_pass"
         android:layout_marginTop="30dp"
         android:hint="@string/pass_val"
-        android:background="#ffffff"
+        android:background="@mipmap/inp"
         android:layout_below="@+id/reg_mail"
         style="@style/style_file"
-        android:padding="7dp" />
+        android:padding="7dp"
+        android:textColor="#fff"
+        android:textColorHint="#666" />
 
     <Button
         android:layout_width="match_parent"

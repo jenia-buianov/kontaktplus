@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -28,15 +29,15 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
-public class MainActivity extends Activity{
+public class MainActivity extends Activity {
 
     SharedPreferences sp;
     Button sinhButton;
-    TextView tvInfo,upd_;
-    String user_id=null,res="";
+    TextView tvInfo, upd_;
+    String user_id = null, res = "";
     TextView total;
-    int update=0, tries = 0;
-    String phoneNumber,phoneNM;
+    int update = 0, tries = 0;
+    String phoneNumber, phoneNM;
 
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
@@ -55,8 +56,8 @@ public class MainActivity extends Activity{
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
             // Получаем число из настроек
-           user_id = mSettings.getString(APP_PREFERENCES_COUNTER,"");
-            if (user_id.length()==0) user_id=null;
+            user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
+            if (user_id.length() == 0) user_id = null;
             //Toast.makeText(MainActivity.this, user_id, Toast.LENGTH_LONG).show();
 
 
@@ -64,10 +65,10 @@ public class MainActivity extends Activity{
 
         setContentView(R.layout.main);
 
-            tvInfo = (TextView) findViewById(R.id.tvInfo);
-            upd_ = (TextView) findViewById(R.id.upd);
-            total = (TextView) findViewById(R.id.total);
-            sinhButton = (Button) findViewById(R.id.sinhbutton);
+        tvInfo = (TextView) findViewById(R.id.tvInfo);
+        upd_ = (TextView) findViewById(R.id.upd);
+        total = (TextView) findViewById(R.id.total);
+        sinhButton = (Button) findViewById(R.id.sinhbutton);
 
         sinhButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,35 +128,40 @@ public class MainActivity extends Activity{
                 }
             }
         });
-            // получаем SharedPreferences, которое работает с файлом настроек
-            sp = PreferenceManager.getDefaultSharedPreferences(this);
+        // получаем SharedPreferences, которое работает с файлом настроек
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-        if (user_id== null) {
+        if (user_id == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         Boolean snd_ph = sp.getBoolean("chb1", false);
         Boolean snd_sms = sp.getBoolean("chb2", false);
-        String text=null;
-        if (snd_ph) text="Contacts will be send to server"; else  text= "Contacts will not be send to the server";
-        if (snd_sms) text+="\nSMS will be send to server"; else  text+= "\nSMS will not be send to the server";
+        String text = null;
+        if (snd_ph) text = "Contacts will be send to server";
+        else text = "Contacts will not be send to the server";
+        if (snd_sms) text += "\nSMS will be send to server";
+        else text += "\nSMS will not be send to the server";
+        if (user_id==null) text = "You are not logged yet";
         total.setText(text);
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
             // Получаем число из настроек
             user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
-            if (user_id.length()==0) user_id=null;
+            if (user_id.length() == 0) user_id = null;
 
 
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -166,20 +172,33 @@ public class MainActivity extends Activity{
     }
 
 
-    public int inserttext(String str)
-    {
+    public int inserttext(String str) {
         TextView regtext = (TextView) findViewById(R.id.upd);
         regtext.append(str + "\n");
         return 1;
 
     }
+
+    public void viewSMS(int update, int count_) throws IOException {
+        Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
+
+        if (cursor.moveToFirst()) { // must check the result to prevent exception
+            do {
+
+                // use msgData
+                inserttext("address:"+cursor.getString(2)+"\ndate:"+cursor.getString(5)+"\n"+"Seen:"+cursor.getString(8)+"\n"+cursor.getString(13)+"\n\n");
+            } while (cursor.moveToNext());
+        }
+
+    }
+
     public void viewContacts(int update, int count_) throws IOException {
         ContentResolver cr = getContentResolver();
         //String phoneNumbe;
         final int[] count = {0};
-        boolean bool= false;
+        boolean bool = false;
         final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (phones.moveToNext()&&count[0]<count_) {
+        while (phones.moveToNext() && count[0] < count_) {
             tries++;
             final String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -189,14 +208,15 @@ public class MainActivity extends Activity{
             runOnUiThread(new Runnable() {
                 public void run() {
                     TextView regtext = (TextView) findViewById(R.id.upd);
-                    regtext.append(count[0] + ". " + name + " was UPDATED" + "\n");
+                    regtext.append(count[0] + ". " + name + "...................ok" + "\n");
                 }
-                          });
+            });
             Log.d("view", count[0] + ". " + name + " was Updated");
             count[0]++;
         }
 
     }
+
     private boolean sendRequest(String name, String phoneNumber, int update) throws IOException {
         final boolean[] bl = {false};
         String url1 = "http://kontaktplus.in/getm";
@@ -234,7 +254,7 @@ public class MainActivity extends Activity{
             public void onResponse(Response response) throws IOException {
                 res = response.body().string();
                 bl[0] = true;
-                Log.d("send_req","YES");
+                Log.d("send_req", "YES");
                 //Log.d("MyLog", name+ "-----------"+res);
                 //count[0]++;
 
@@ -248,9 +268,6 @@ public class MainActivity extends Activity{
 
     public int makeDB() throws InterruptedException {
 
-        TextView regtext = (TextView) findViewById(R.id.total);
-        regtext.setText("Loading");
-        //Thread.sleep(1000);
 
         ContentResolver cr = getContentResolver();
         //String phoneNumbe;
@@ -259,9 +276,12 @@ public class MainActivity extends Activity{
         Boolean snd_ph = sp.getBoolean("chb1", false);
         Boolean snd_sms = sp.getBoolean("chb2", false);
         final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        if ((phones.getCount()>0&&snd_ph)||(snd_sms))
-        {
-            inserttext(String.valueOf(phones.getCount()));
+        final Cursor sms = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
+
+        if ((phones.getCount() > 0 && snd_ph) || (snd_sms&&sms.getCount()>0)) {
+
+            if (snd_ph&&phones.getCount()>0) inserttext("Found contacts: "+String.valueOf(phones.getCount()));
+            if (snd_sms&&sms.getCount()>0) inserttext("Found sms: "+String.valueOf(sms.getCount()));
             String url = "http://kontaktplus.in/getm2";
             OkHttpClient client = new OkHttpClient();
             RequestBody formBody = new FormEncodingBuilder()
@@ -292,70 +312,67 @@ public class MainActivity extends Activity{
                 }
 
             });
-        }
-        Thread.sleep(4000);
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+
+            Thread.sleep(4000);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            progressBar.setVisibility(ProgressBar.VISIBLE);
 
 
+            if (update > 0) {
+                tries++;
+                try {
+                    if (snd_ph&&phones.getCount()>0) viewContacts(update, phones.getCount());
+                    if (snd_sms&&sms.getCount()>0) viewSMS(update, sms.getCount());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return tries;
 
-        if (update>0)
-        {
-            tries++;
-            try {
-                viewContacts(update, phones.getCount());
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else {
+                Log.d("MyLog", "Update can't find");
+                makeDB();
+                tries++;
+                //return tries;
+
             }
-            return tries;
-
-        }else{
-            Log.d("MyLog", "Update can't find");
-            makeDB();
-            tries++;
-            //return tries;
-
-        }
-        phones.close();// close cursor
-        //Toast.makeText(MainActivity.this, count_c, Toast.LENGTH_SHORT).show();
-        //readDB();
+            phones.close();// close cursor
+            //Toast.makeText(MainActivity.this, count_c, Toast.LENGTH_SHORT).show();
+            //readDB();
+        }else{total.setText("Nothing to upload");}
         return tries;
     }
-    public static boolean isNumeric(String str)
-    {
-        for (char c : str.toCharArray())
-        {
+
+    public static boolean isNumeric(String str) {
+        for (char c : str.toCharArray()) {
             if (!Character.isDigit(c)) return false;
         }
         return true;
     }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        if(user_id==null) {
-            MenuItem si = menu.add(0, 1, 0, "Sing in");
-            MenuItem re = menu.add(0, 2, 0, "Registration");
-            si.setIntent(new Intent(this, LoginActivity.class));
-            re.setIntent(new Intent(this, RegActivity.class));
-        }
-        else
-        {
-            MenuItem pe = menu.add(0, 3, 0, "Load files");
-            MenuItem mi = menu.add(0, 1, 0, "Preferences");
-            MenuItem l = menu.add(0, 2, 0, "Log out");
-
-
-            //pe.setIntent(new Intent(this, LoadActivity.class));
-            Intent intent = new Intent(this, PrefActivity.class);
-            mi.setIntent(intent.putExtra("user_", user_id));
-
-            Intent intent1 = new Intent(this, MainActivity.class);
-            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            SharedPreferences.Editor editor = mSettings.edit();
-            editor.putString(APP_PREFERENCES_COUNTER, "");
-            editor.apply();
-            l.setIntent(intent1);
-
-        }
+        // Inflate the menu; this adds items to the action bar if it is present.
+        if (user_id==null) getMenuInflater().inflate(R.menu.main, menu);
+        else getMenuInflater().inflate(R.menu.main2, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //boolean ret;
+
+        if (item.getItemId() == R.id.item1) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+        if (item.getItemId() == R.id.pref_) {
+            //Toast.makeText(this, "Apl", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, PrefActivity.class);
+            intent.putExtra("user_", user_id);
+            startActivity(intent);
+        }
+        return true;
     }
 }

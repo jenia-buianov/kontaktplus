@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/load"
+        android:icon="@mipmap/load2"
+        android:showAsAction="always"
+        android:title="Load files"
+        tools:ignore="AppCompatResource,MenuTitle" />
+    <item
+        android:id="@+id/reg_aa"
+        android:icon="@mipmap/language"
+        android:showAsAction="ifRoom"
+        android:title="Language"
+        tools:ignore="AppCompatResource,MenuTitle">
+    </item>
+    <item
+        android:id="@+id/pref_"
+        android:icon="@mipmap/pref"
+        android:showAsAction="ifRoom"
+        android:title="Settings"
+        tools:ignore="AppCompatResource,MenuTitle">
+    </item>
+
+</menu>

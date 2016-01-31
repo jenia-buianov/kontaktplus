@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,8 +84,7 @@ public class LoginActivity extends Activity {
                         //Интернет соединение есть
                         //делаем HTTP запросы:
 
-                        try {
-                            sendRequest();
+                        try {sendRequest();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -127,8 +127,11 @@ public class LoginActivity extends Activity {
 
     private void sendRequest() throws IOException {
 
-        TextView regtext = (TextView) findViewById(R.id.textView);
+        Log.d("MyLog","START");
+        TextView regtext = (TextView) findViewById(R.id.textView2);
         regtext.setVisibility(TextView.INVISIBLE);
+
+        //Toast.makeText(LoginActivity.this, "Start", Toast.LENGTH_SHORT).show();
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -159,7 +162,7 @@ public class LoginActivity extends Activity {
             public void onResponse(Response response) throws IOException {
                 res = response.body().string();
                 res = res.toString();
-                if (res.length()==0||!isNumeric(res)) {
+                if (res.length() == 0 || !isNumeric(res)) {
                     Log.d("Error ", res);
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -185,8 +188,7 @@ public class LoginActivity extends Activity {
                     });
 
 
-
-                }else {
+                } else {
                     SharedPreferences.Editor editor = mSettings.edit();
                     editor.putString(APP_PREFERENCES_COUNTER, res);
                     //editor.apply();
@@ -210,10 +212,24 @@ public class LoginActivity extends Activity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //boolean ret;
+
+        if (item.getItemId() == R.id.item1) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         return true;
     }
 

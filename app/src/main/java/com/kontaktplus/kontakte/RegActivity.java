@@ -123,8 +123,8 @@ public class RegActivity extends Activity{
 
     private void sendRequest() throws IOException {
         //Log.d(LOGTAG, "sendRequest()");
-        TextView regtext = (TextView) findViewById(R.id.textView);
-        regtext.setVisibility(TextView.INVISIBLE);
+       // TextView regtext = (TextView) findViewById(R.id.textView);
+       // regtext.setVisibility(TextView.INVISIBLE);
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);

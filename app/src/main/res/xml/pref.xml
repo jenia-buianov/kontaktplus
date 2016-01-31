@@ -13,26 +13,14 @@
         android:summary="Description of lenguage"
         android:title="Language">
     </ListPreference>
-    <PreferenceScreen
-        android:key="screen"
-        android:summary="Description of screen"
-        android:title="Screen">
-        <PreferenceCategory
-            android:key="categ1"
-            android:summary="Description of category 1"
-            android:title="Select">
-            <CheckBoxPreference
-                android:key="chb1"
-                android:summary="Description of phone book"
-                android:title="Phone Book"
-                android:defaultValue="true">
-            </CheckBoxPreference>
-            <CheckBoxPreference
-                android:key="chb2"
-                android:summary="Description of SMS"
-                android:title="SMS"
-                android:defaultValue="true">
-            </CheckBoxPreference>
-        </PreferenceCategory>
-    </PreferenceScreen>
+    <CheckBoxPreference
+        android:key="chb1"
+        android:summary="Description of phone book"
+        android:title="Phone Book">
+    </CheckBoxPreference>
+    <CheckBoxPreference
+        android:key="chb2"
+        android:summary="Description of SMS"
+        android:title="SMS">
+    </CheckBoxPreference>
 </PreferenceScreen>

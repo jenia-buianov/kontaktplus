@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/item1"
+        android:icon="@mipmap/login"
+        android:showAsAction="always"
+        android:title="Sing in"
+        tools:ignore="AppCompatResource,MenuTitle" />
+    <item
+        android:id="@+id/item2"
+        android:icon="@mipmap/language"
+        android:showAsAction="ifRoom"
+        android:title="Language"
+        tools:ignore="AppCompatResource,MenuTitle">
+    </item>
+    <item
+        android:id="@+id/item3"
+        android:icon="@mipmap/url"
+        android:showAsAction="ifRoom"
+        android:title="Visit web site"
+        tools:ignore="AppCompatResource,MenuTitle">
+    </item>
+
+</menu>
