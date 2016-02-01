@@ -19,9 +19,10 @@
     
     <string-array name="language">
         <item>English</item>
-        <item>Русский</item>
+        <item>Russian</item>
     </string-array>
     
+    <string name="close" >Close</string>
     <string name="english" >English</string>
     <string name="russian" >Russian</string>
     <string name="Off_sinh" />

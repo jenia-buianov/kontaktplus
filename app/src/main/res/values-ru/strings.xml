@@ -18,10 +18,11 @@
     </string-array>
     
     <string-array name="language">
-        <item>English</item>
+        <item>Английский</item>
         <item>Русский</item>
     </string-array>
-    
+
+    <string name="close" >Close</string>
     <string name="Off_sinh" />
     <string name="on_sinh" />
     <string name="email">E-mail</string>

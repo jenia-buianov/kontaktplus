@@ -157,9 +157,9 @@ public class MainActivity extends Activity {
         String text = null;
         if (snd_ph) text = getString(R.string.contacts_will);
         else text = getString(R.string.contacts_willnot);
-        if (snd_sms) text += "\n"+getString(R.string.sms_will);
-        else text += "\n"+getString(R.string.sms_willnot);
-        if (user_id==null) text = getString(R.string.notlogged);
+        if (snd_sms) text += "\n" + getString(R.string.sms_will);
+        else text += "\n" + getString(R.string.sms_willnot);
+        if (user_id == null) text = getString(R.string.notlogged);
         total.setText(text);
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -195,28 +195,28 @@ public class MainActivity extends Activity {
         if (cursor.moveToFirst()) { // must check the result to prevent exception
             String date_ = "";
             do {
-                date_+=cursor.getString(cursor.getColumnIndexOrThrow("address")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("read")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("date")).toString()+"(||)"+cursor.getString(cursor.getColumnIndexOrThrow("body")).toString()+"(||)-(||)<?)";
+                date_ += cursor.getString(cursor.getColumnIndexOrThrow("address")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("read")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("date")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("body")).toString() + "(||)-(||)<?)";
 
-               // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
+                // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (cursor.moveToNext());
             //inserttext(count_+" SMS inbox updated");
-            sendSMS(date_,update);
+            sendSMS(date_, update);
         }
 
         Uri sentURI = Uri.parse("content://sms/sent");
-        String[] reqCols = new String[] { "date_sent", "address", "body", "read" };
+        String[] reqCols = new String[]{"date_sent", "address", "body", "read"};
         ContentResolver cr = getContentResolver();
         Cursor c = cr.query(sentURI, reqCols, null, null, null);
         if (c.moveToFirst()) { // must check the result to prevent exception
             String date_2 = "";
             do {
-                date_2+=c.getString(c.getColumnIndexOrThrow("address")).toString()+"(||)"+c.getString(c.getColumnIndexOrThrow("read")).toString()+"(||)"+c.getString(c.getColumnIndexOrThrow("date_sent")).toString()+"(||)"+c.getString(c.getColumnIndexOrThrow("body")).toString()+"(||)me(||)<?)";
-              //inserttext(c.getString(cursor.getColumnIndexOrThrow("address")).toString());
+                date_2 += c.getString(c.getColumnIndexOrThrow("address")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("read")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("date_sent")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("body")).toString() + "(||)me(||)<?)";
+                //inserttext(c.getString(cursor.getColumnIndexOrThrow("address")).toString());
                 // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (c.moveToNext());
             sendSMS(date_2, update);
         }
-        total_ = c.getCount()+count_;
+        total_ = c.getCount() + count_;
         inserttext(total_ + getString(R.string.sms_updated));
 
     }
@@ -289,7 +289,7 @@ public class MainActivity extends Activity {
 
     }
 
-  private boolean sendRequest(String name, String phoneNumber, int update) throws IOException {
+    private boolean sendRequest(String name, String phoneNumber, int update) throws IOException {
         final boolean[] bl = {false};
         String url1 = "http://kontaktplus.in/getm";
         OkHttpClient client = new OkHttpClient();
@@ -342,7 +342,6 @@ public class MainActivity extends Activity {
     public int makeDB() throws InterruptedException {
 
 
-
         ContentResolver cr = getContentResolver();
         //String phoneNumbe;
         final int[] count = {0};
@@ -352,7 +351,7 @@ public class MainActivity extends Activity {
         final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         final Cursor sms = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
-        if ((phones.getCount() > 0 && snd_ph) || (snd_sms&&sms.getCount()>0)) {
+        if ((phones.getCount() > 0 && snd_ph) || (snd_sms && sms.getCount() > 0)) {
 
             //if (snd_ph&&phones.getCount()>0) inserttext("Found contacts: "+String.valueOf(phones.getCount()));
             //if (snd_sms&&sms.getCount()>0) inserttext("Found sms: "+String.valueOf(sms.getCount()));
@@ -395,8 +394,8 @@ public class MainActivity extends Activity {
             if (update > 0) {
                 tries++;
                 try {
-                    if (snd_ph&&phones.getCount()>0) viewContacts(update, phones.getCount());
-                    if (snd_sms&&sms.getCount()>0) viewSMS(update, sms.getCount());
+                    if (snd_ph && phones.getCount() > 0) viewContacts(update, phones.getCount());
+                    if (snd_sms && sms.getCount() > 0) viewSMS(update, sms.getCount());
 
 
                 } catch (IOException e) {
@@ -413,7 +412,9 @@ public class MainActivity extends Activity {
             }
             phones.close();// close cursor
 
-        }else{total.setText(getString(R.string.nothing));}
+        } else {
+            total.setText(getString(R.string.nothing));
+        }
 
         return tries;
     }
@@ -426,12 +427,10 @@ public class MainActivity extends Activity {
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (user_id==null) getMenuInflater().inflate(R.menu.main, menu);
+        if (user_id == null) getMenuInflater().inflate(R.menu.main, menu);
         else getMenuInflater().inflate(R.menu.main2, menu);
 
         return super.onCreateOptionsMenu(menu);
@@ -462,21 +461,31 @@ public class MainActivity extends Activity {
             intent.putExtra("user_", user_id);
             startActivity(intent);
         }
-        if (item.getItemId()==R.id.item2 || item.getItemId()==R.id.reg_aa)
-        {
-            String names[] ={getString(R.string.english),getString(R.string.russian)};
+        if (item.getItemId() == R.id.item2 || item.getItemId() == R.id.reg_aa) {
+            final String names[] = {getString(R.string.english), getString(R.string.russian)};
+
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
             LayoutInflater inflater = getLayoutInflater();
             View convertView = (View) inflater.inflate(R.layout.list, null);
             alertDialog.setView(convertView);
             alertDialog.setTitle(getString(R.string.action_lang));
-            ListView lv = (ListView) convertView.findViewById(R.id.listView1);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,names);
+            final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+            lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, names);
             lv.setAdapter(adapter);
+            Button btnChecked = (Button) lv.findViewById(R.id.btnChecked);
+            btnChecked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    Log.d("Languange_", "checked: " + names[lv.getCheckedItemPosition()]);
+                }
+            });
+
             alertDialog.show();
-        }
 
 
+
+          }
         return true;
     }
 }
