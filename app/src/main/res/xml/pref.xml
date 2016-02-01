@@ -2,25 +2,13 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
-        android:key="ntf"
-        android:summary="Description of notification"
-        android:title="Notification">
-    </CheckBoxPreference>
-    <ListPreference
-        android:entries="@array/language"
-        android:entryValues="@array/entry_values"
-        android:key="Lang"
-        android:summary="Description of lenguage"
-        android:title="Language">
-    </ListPreference>
-    <CheckBoxPreference
         android:key="chb1"
-        android:summary="Description of phone book"
-        android:title="Phone Book">
+        android:summary="@string/desc_phone_book"
+        android:title="@string/phone_book">
     </CheckBoxPreference>
     <CheckBoxPreference
         android:key="chb2"
-        android:summary="Description of SMS"
+        android:summary="@string/desc_sms"
         android:title="SMS">
     </CheckBoxPreference>
 </PreferenceScreen>

@@ -22,6 +22,8 @@
         <item>Русский</item>
     </string-array>
     
+    <string name="english" >English</string>
+    <string name="russian" >Russian</string>
     <string name="Off_sinh" />
     <string name="on_sinh" />
     <string name="email">E-mail</string>
@@ -63,5 +65,30 @@
     <string name="registartion">Registration</string>
     <string name="wrning_reg">Be carefull! Making registration your contacts and sms will be send t othe server. This data is absolutly confidience</string>
     <string name="dellcont">Delete Contacts and write from server</string>
+    <string name="update_string">Update</string>
+    <string name="warning_loading">Loading has started. Please do not close the app. You will see the result in the end</string>
+    <string name="agree">Ok, I agree</string>
+    <string name="internet_error">INTERNET ERORR</string>
+    <string name="connection_error">You do not have connection with internet</string>
+    <string name="again">TRY AGAIN</string>
+    <string name="contacts_will">Contacts will be send to server</string>
+    <string name="contacts_willnot">Contacts will not be send to the server</string>
+    <string name="sms_will">SMS will be send to server</string>
+    <string name="sms_willnot">SMS will not be send to the server</string>
+    <string name="notlogged">You are not logged yet</string>
+    <string name="sms_updated"> SMS updated</string>
+    <string name="contacts_updated">Contacts updated</string>
+    <string name="nothing">Nothing to upload</string>
+    <string name="finished">FINISHED UPDATE</string>
+    <string name="were_added"> contacts were added\n</string>
+    <string name="sms_were_added"> sms were added</string>
+    <string name="ok">ok</string>
+    <string name="response">RESPONSE FROM SERVER</string>
+    <string name="not_all">You did not introduce all dates</string>
+    <string name="reg_error">REGISTRATION ERROR</string>
+    <string name="atorize_error">AUTHORIZATION ERROR</string>
+    <string name="desc_phone_book">Your phone book will be saved on the server</string>
+    <string name="desc_sms">Your sms will be saved on the server</string>
+    <string name="phone_book">Phone Book</string>
 
 </resources>

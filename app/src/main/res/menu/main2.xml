@@ -12,6 +12,7 @@
     <item
         android:id="@+id/reg_aa"
         android:icon="@mipmap/language"
+        android:entryValues="@array/entry_values"
         android:showAsAction="ifRoom"
         android:title="Language"
         tools:ignore="AppCompatResource,MenuTitle">

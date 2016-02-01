@@ -1,10 +1,12 @@
 package com.kontaktplus.kontakte;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.SharedPreferences;
@@ -47,6 +49,7 @@ public class Load extends Activity {
 
 
 
+
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
     public final static String FILE_NAME = "filename";
@@ -75,6 +78,7 @@ public class Load extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private void Load_upd() throws IOException {
@@ -145,11 +149,51 @@ public class Load extends Activity {
                     ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
                     progressBar.setVisibility(ProgressBar.VISIBLE);
 
-                    try {
-                        update(vk);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    cd = new ConnectionDetector(getApplicationContext());
+                    isInternetPresent = cd.ConnectingToInternet();
+
+                    //Проверяем Интернет статус:
+                    if (isInternetPresent) {
+                        //Интернет соединение есть
+                        //делаем HTTP запросы:
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Load.this);
+                                builder.setTitle(getString(R.string.update_string))
+                                        .setMessage(getString(R.string.warning_loading))
+                                        .setCancelable(false)
+                                        .setNegativeButton(getString(R.string.ok),
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        dialog.cancel();
+                                                        //total.setText("Loading");
+                                                        try {
+                                                            update(vk);
+                                                        } catch (IOException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            }
+                        });
+
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Load.this);
+                        builder.setTitle(getString(R.string.internet_error))
+                                .setMessage(getString(R.string.connection_error))
+                                .setCancelable(false)
+                                .setNegativeButton(getString(R.string.again),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
                     }
+
                     //Log.d("L_M_N_", String.valueOf(vk));
                     //Toast.makeText(this, "Lo", Toast.LENGTH_SHORT).show();
                 }
@@ -167,7 +211,9 @@ public class Load extends Activity {
 
     }
     private boolean update(int update) throws IOException {
+
         final boolean[] bl = {false};
+        final Context context = this;
         String url1 = "http://kontaktplus.in/get_ct";
         Log.d("UPDATE_", String.valueOf(update));
         OkHttpClient client = new OkHttpClient();
@@ -205,35 +251,34 @@ public class Load extends Activity {
                 Log.d("send_req", "YES");
                 CheckBox rewrite = (CheckBox) findViewById(R.id.checkBox);
                 if (rewrite.isChecked()) {
+
                     ContentResolver cr = getContentResolver();
 
-                Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                        null, null, null, null);
-                while (cur.moveToNext()) {
-                    try {
-                        String lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-                        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
-                        cr.delete(uri, null, null);
-                    } catch (Exception e) {
-                        System.out.println(e.getStackTrace());
-                    }finally {
-                        cur.close();
-                    }
-
-                }
-
-
-                    Cursor c = getApplicationContext().getContentResolver().query(Uri.parse("content://sms/"), null, null, null,null);
-                    try {
-                        while (c.moveToNext()) {
-                            int id = c.getInt(0);
-                            getApplicationContext().getContentResolver().delete(Uri.parse("content://sms/" + id), null, null);
+                    Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                            null, null, null, null);
+                    while (cur.moveToNext()) {
+                        try {
+                            String lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
+                            cr.delete(uri, null, null);
+                        } catch (Exception e) {
+                            System.out.println(e.getStackTrace());
                         }
 
-                    }catch(Exception e){
-                        Log.e(this.toString(),"Error deleting sms",e);
-                    }finally {
-                        c.close();
+                    }
+
+
+                    try{
+                        //***********************here i want to delete that perticullar sms ***************
+
+                        ContentResolver cr1=getContentResolver();
+                        Uri url=Uri.parse("content://sms/");
+                        int num_deleted=cr1.delete(url, null, null);
+                        Log.d("Sms_dell", String.valueOf(num_deleted));
+
+                    }catch(Exception e)
+                    {
+                        Log.i("exception ",e.getMessage());
                     }
             }
                 Log.d("RESULT",res);
@@ -244,9 +289,8 @@ public class Load extends Activity {
                 String[] contacts = body.split("_!-!");
                 String[] smses = sms_.split("_!-!");
                 //Log.d("Body", body);
-
                 int k = 0;
-                while(k<contacts.length-1) {
+                while(k<contacts.length) {
                     Log.d("Conts",contacts[k].toString());
                     String bd = contacts[k].toString();
                     String[] contact = bd.split("!-_!");
@@ -261,7 +305,7 @@ public class Load extends Activity {
                     //values.put(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, contact[0]);
                     //Uri dataUri = getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
 
-                    ArrayList <ContentProviderOperation> ops = new ArrayList< ContentProviderOperation >();
+                    ArrayList<ContentProviderOperation> ops = new ArrayList< ContentProviderOperation >();
 
                     ops.add(ContentProviderOperation.newInsert(
                             ContactsContract.RawContacts.CONTENT_URI)
@@ -270,14 +314,14 @@ public class Load extends Activity {
                             .build());
 
 
-                        ops.add(ContentProviderOperation.newInsert(
-                                ContactsContract.Data.CONTENT_URI)
-                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                .withValue(ContactsContract.Data.MIMETYPE,
-                                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                                .withValue(
-                                        ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
-                                        name).build());
+                    ops.add(ContentProviderOperation.newInsert(
+                            ContactsContract.Data.CONTENT_URI)
+                            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                            .withValue(ContactsContract.Data.MIMETYPE,
+                                    ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                            .withValue(
+                                    ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                                    name).build());
 
 
                     //------------------------------------------------------ Mobile Number
@@ -299,9 +343,11 @@ public class Load extends Activity {
                     }
                     k++;
                 }
+
+
                 int m = 0;
-                while(m<smses.length-1) {
-                    String bd = smses[k].toString();
+                while(m<smses.length) {
+                    String bd = smses[m].toString();
                     String[] message = bd.split("!-_!");
                     String from = message[0].toString();
                     String phone = message[1].toString();
@@ -310,9 +356,11 @@ public class Load extends Activity {
                     String seen = message[4].toString();
                     String snd = "";
                     Log.d("SendMS",ms);
+                    Log.d("Type SMS ",from);
 
 
                     if (from=="me") {snd = "sent";} else {snd = "inbox";}
+                    Log.d("Send_",snd);
                     Uri uri = Uri.parse("content://sms/"+snd);
                     ContentValues cv2 = new ContentValues();
                     cv2.put("address", phone);
@@ -324,8 +372,28 @@ public class Load extends Activity {
                     /** This is very important line to solve the problem */
                     //getContentResolver().delete(Uri.parse("content://sms/conversations/-1"), null, null);
                     cv2.clear();
+                    m++;
 
                 }
+                final int finalK = k;
+                final int finalM = m;
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Load.this);
+                        builder.setTitle(getString(R.string.finished))
+                                .setMessage(finalK + getString(R.string.were_added) + finalM + getString(R.string.sms_were_added))
+                                .setCancelable(false)
+                                .setNegativeButton(getString(R.string.ok),
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
+                    }
+                });
 
                 }
 

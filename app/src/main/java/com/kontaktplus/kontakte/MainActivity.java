@@ -15,10 +15,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -97,10 +100,10 @@ public class MainActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             public void run() {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                builder.setTitle("Update")
-                                        .setMessage("Loading has started. Please don't close the app. You will see the result in the end")
+                                builder.setTitle(getString(R.string.update_string))
+                                        .setMessage(getString(R.string.warning_loading))
                                         .setCancelable(false)
-                                        .setNegativeButton("Ok, I agree",
+                                        .setNegativeButton(getString(R.string.agree),
                                                 new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int id) {
                                                         dialog.cancel();
@@ -119,10 +122,10 @@ public class MainActivity extends Activity {
 
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle("INTERNET ERORR")
-                                .setMessage("You don't have connection with internet")
+                        builder.setTitle(getString(R.string.internet_error))
+                                .setMessage(getString(R.string.connection_error))
                                 .setCancelable(false)
-                                .setNegativeButton("TRY AGAIN",
+                                .setNegativeButton(getString(R.string.again),
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 dialog.cancel();
@@ -152,11 +155,11 @@ public class MainActivity extends Activity {
         Boolean snd_ph = sp.getBoolean("chb1", false);
         Boolean snd_sms = sp.getBoolean("chb2", false);
         String text = null;
-        if (snd_ph) text = "Contacts will be send to server";
-        else text = "Contacts will not be send to the server";
-        if (snd_sms) text += "\nSMS will be send to server";
-        else text += "\nSMS will not be send to the server";
-        if (user_id==null) text = "You are not logged yet";
+        if (snd_ph) text = getString(R.string.contacts_will);
+        else text = getString(R.string.contacts_willnot);
+        if (snd_sms) text += "\n"+getString(R.string.sms_will);
+        else text += "\n"+getString(R.string.sms_willnot);
+        if (user_id==null) text = getString(R.string.notlogged);
         total.setText(text);
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -214,7 +217,7 @@ public class MainActivity extends Activity {
             sendSMS(date_2, update);
         }
         total_ = c.getCount()+count_;
-        inserttext(total_ + " SMS updated");
+        inserttext(total_ + getString(R.string.sms_updated));
 
     }
 
@@ -234,7 +237,7 @@ public class MainActivity extends Activity {
             Log.d("view", count[0] + ". " + name + " was Updated");
             count[0]++;
         }
-        inserttext(count_ + " Contacts updated");
+        inserttext(count_ + getString(R.string.contacts_updated));
     }
 
     private boolean sendSMS(String mess, int update) throws IOException {
@@ -410,7 +413,7 @@ public class MainActivity extends Activity {
             }
             phones.close();// close cursor
 
-        }else{total.setText("Nothing to upload");}
+        }else{total.setText(getString(R.string.nothing));}
 
         return tries;
     }
@@ -443,6 +446,10 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+        if (item.getItemId() == R.id.item3) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.kontaktplus.in"));
+            startActivity(browserIntent);
+        }
         if (item.getItemId() == R.id.pref_) {
             //Toast.makeText(this, "Apl", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, PrefActivity.class);
@@ -455,6 +462,21 @@ public class MainActivity extends Activity {
             intent.putExtra("user_", user_id);
             startActivity(intent);
         }
+        if (item.getItemId()==R.id.item2 || item.getItemId()==R.id.reg_aa)
+        {
+            String names[] ={getString(R.string.english),getString(R.string.russian)};
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = (View) inflater.inflate(R.layout.list, null);
+            alertDialog.setView(convertView);
+            alertDialog.setTitle(getString(R.string.action_lang));
+            ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,names);
+            lv.setAdapter(adapter);
+            alertDialog.show();
+        }
+
+
         return true;
     }
 }

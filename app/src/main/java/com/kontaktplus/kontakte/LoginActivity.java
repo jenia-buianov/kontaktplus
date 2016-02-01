@@ -91,10 +91,10 @@ public class LoginActivity extends Activity {
 
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                        builder.setTitle("INTERNET ERORR")
-                                .setMessage("You don't have connection with internet")
+                        builder.setTitle(getString(R.string.internet_error))
+                                .setMessage(getString(R.string.connection_error))
                                 .setCancelable(false)
-                                .setNegativeButton("TRY AGAIN",
+                                .setNegativeButton(getString(R.string.again),
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 dialog.cancel();
@@ -107,10 +107,10 @@ public class LoginActivity extends Activity {
 
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setTitle("AUTHORIZATION ERROR")
-                            .setMessage("You didn't introduce all dates")
+                    builder.setTitle(getString(R.string.atorize_error))
+                            .setMessage(getString(R.string.not_all))
                             .setCancelable(false)
-                            .setNegativeButton("TRY AGAIN",
+                            .setNegativeButton(getString(R.string.again),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             dialog.cancel();
@@ -173,10 +173,10 @@ public class LoginActivity extends Activity {
                             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
                             progressBar.setVisibility(ProgressBar.INVISIBLE);
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                            builder.setTitle("RASPONSE")
+                            builder.setTitle(getString(R.string.response))
                                     .setMessage(res)
                                     .setCancelable(false)
-                                    .setNegativeButton("TRY AGAIN",
+                                    .setNegativeButton(getString(R.string.again),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int id) {
                                                     dialog.cancel();
@@ -217,10 +217,7 @@ public class LoginActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        MenuItem si = menu.add(0, 1, 0, "Sing in");
-        MenuItem lng = menu.add(0, 2, 0, "Language");
-        MenuItem vi = menu.add(0, 3, 0, "Visit web site");
-        si.setIntent(new Intent(this, LoginActivity.class));
+
         return super.onCreateOptionsMenu(menu);
     }
 

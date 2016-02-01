@@ -89,10 +89,10 @@ public class RegActivity extends Activity{
 
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
-                        builder.setTitle("INTERNET ERORR")
-                                .setMessage("You don't have connection with internet")
+                        builder.setTitle(getString(R.string.internet_error))
+                                .setMessage(getString(R.string.connection_error))
                                 .setCancelable(false)
-                                .setNegativeButton("TRY AGAIN",
+                                .setNegativeButton(getString(R.string.again),
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 dialog.cancel();
@@ -105,10 +105,10 @@ public class RegActivity extends Activity{
 
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
-                    builder.setTitle("REGISTRATION ERROR")
-                            .setMessage("You didn't introduce all dates")
+                    builder.setTitle(getString(R.string.reg_error))
+                            .setMessage(getString(R.string.not_all))
                             .setCancelable(false)
-                            .setNegativeButton("TRY AGAIN",
+                            .setNegativeButton(getString(R.string.again),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             dialog.cancel();
@@ -173,10 +173,10 @@ public class RegActivity extends Activity{
                             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
                             progressBar.setVisibility(ProgressBar.INVISIBLE);
                             AlertDialog.Builder builder = new AlertDialog.Builder(RegActivity.this);
-                            builder.setTitle("RASPONSE")
+                            builder.setTitle(getString(R.string.response))
                                     .setMessage(res)
                                     .setCancelable(false)
-                                    .setNegativeButton("TRY AGAIN",
+                                    .setNegativeButton(getString(R.string.again),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int id) {
                                                     dialog.cancel();
