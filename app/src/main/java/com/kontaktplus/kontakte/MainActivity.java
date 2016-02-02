@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends Activity {
 
@@ -45,6 +48,7 @@ public class MainActivity extends Activity {
     String phoneNumber, phoneNM;
     NotificationManager manager;
     Notification myNotication;
+    public boolean working = false;
 
 
     public static final String APP_PREFERENCES = "myusers";
@@ -74,6 +78,17 @@ public class MainActivity extends Activity {
         }
 
         setContentView(R.layout.main);
+        if (user_id!=null)
+        {
+            final Timer myTimer = new Timer();
+            myTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    new_contacts();
+                }
+
+            }, 10000, 10000);
+        }
 
         tvInfo = (TextView) findViewById(R.id.tvInfo);
         upd_ = (TextView) findViewById(R.id.upd);
@@ -109,7 +124,7 @@ public class MainActivity extends Activity {
                                                         dialog.cancel();
                                                         //total.setText("Loading");
                                                         try {
-                                                            makeDB();
+                                                            makeDB(true);
                                                         } catch (InterruptedException e) {
                                                             e.printStackTrace();
                                                         }
@@ -189,9 +204,11 @@ public class MainActivity extends Activity {
 
     }
 
-    public void viewSMS(int update, int count_) throws IOException {
+    public void viewSMS(int update, int count_, Boolean manual) throws IOException {
+        Log.d("viewSMS","STARTED");
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
         int total_ = 0;
+        Log.d("viewSMS", String.valueOf(count_));
         if (cursor.moveToFirst()) { // must check the result to prevent exception
             String date_ = "";
             do {
@@ -217,16 +234,18 @@ public class MainActivity extends Activity {
             sendSMS(date_2, update);
         }
         total_ = c.getCount() + count_;
-        inserttext(total_ + getString(R.string.sms_updated));
+        if (manual) inserttext(total_ + getString(R.string.sms_updated));
 
     }
 
-    public void viewContacts(int update, final int count_) throws IOException {
+    public void viewContacts(int update, final int count_, Boolean manual) throws IOException {
+        Log.d("viewContacts","STARTED");
         ContentResolver cr = getContentResolver();
         //String phoneNumbe;
         final int[] count = {0};
         boolean bool = false;
         final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        Log.d("viewContacts", String.valueOf(count_));
         while (phones.moveToNext() && count[0] < count_) {
             tries++;
             final String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
@@ -237,7 +256,7 @@ public class MainActivity extends Activity {
             Log.d("view", count[0] + ". " + name + " was Updated");
             count[0]++;
         }
-        inserttext(count_ + getString(R.string.contacts_updated));
+        if (manual) inserttext(count_ + getString(R.string.contacts_updated));
     }
 
     private boolean sendSMS(String mess, int update) throws IOException {
@@ -339,86 +358,129 @@ public class MainActivity extends Activity {
     }
 
     //@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public int makeDB() throws InterruptedException {
+    public int makeDB(Boolean manual) throws InterruptedException {
+        Log.d("MakeDB","START");
 
+        if (!working) {
+            Log.d("MakeDB_working","true");
+            working = true;
+            ContentResolver cr = getContentResolver();
+            //String phoneNumbe;
+            final int[] count = {0};
 
-        ContentResolver cr = getContentResolver();
-        //String phoneNumbe;
-        final int[] count = {0};
+            Boolean snd_ph = sp.getBoolean("chb1", false);
+            Boolean snd_sms = sp.getBoolean("chb2", false);
+            final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+            final Cursor sms = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
-        Boolean snd_ph = sp.getBoolean("chb1", false);
-        Boolean snd_sms = sp.getBoolean("chb2", false);
-        final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        final Cursor sms = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
+            if ((phones.getCount() > 0 && snd_ph) || (snd_sms && sms.getCount() > 0)) {
 
-        if ((phones.getCount() > 0 && snd_ph) || (snd_sms && sms.getCount() > 0)) {
+                //if (snd_ph&&phones.getCount()>0) inserttext("Found contacts: "+String.valueOf(phones.getCount()));
+                //if (snd_sms&&sms.getCount()>0) inserttext("Found sms: "+String.valueOf(sms.getCount()));
+                Log.d("MakeDB","find update");
+                String url = "http://kontaktplus.in/getm2";
+                OkHttpClient client = new OkHttpClient();
+                RequestBody formBody = new FormEncodingBuilder()
+                        .add("uid", user_id)
 
-            //if (snd_ph&&phones.getCount()>0) inserttext("Found contacts: "+String.valueOf(phones.getCount()));
-            //if (snd_sms&&sms.getCount()>0) inserttext("Found sms: "+String.valueOf(sms.getCount()));
-            String url = "http://kontaktplus.in/getm2";
-            OkHttpClient client = new OkHttpClient();
-            RequestBody formBody = new FormEncodingBuilder()
-                    .add("uid", user_id)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .build();
 
-                    .build();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(formBody)
-                    .build();
+                Call call = client.newCall(request);
+                //Thread.sleep(3000);
 
-            Call call = client.newCall(request);
-            //Thread.sleep(3000);
+                call.enqueue(new com.squareup.okhttp.Callback() {
+                    //1000 milliseconds is one second.
 
-            call.enqueue(new com.squareup.okhttp.Callback() {
-                //1000 milliseconds is one second.
+                    @Override
+                    public void onFailure(Request request, IOException e) {
 
-                @Override
-                public void onFailure(Request request, IOException e) {
+                        res = e.getMessage();
+                        Log.d("MakeDB_FAIL",res);
+                    }
 
-                    res = e.getMessage();
+                    @Override
+                    public void onResponse(Response response) throws IOException {
+                        res = response.body().string();
+                        update = Integer.parseInt(res);
+                    }
+
+                });
+
+                Thread.sleep(4000);
+                if (manual) {
+                    ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                    progressBar.setVisibility(ProgressBar.VISIBLE);
                 }
 
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    res = response.body().string();
-                    update = Integer.parseInt(res);
+                if (update > 0) {
+                    tries++;
+                    Log.d("MakeDB_upd", String.valueOf(update));
+                    try {
+                        if (snd_ph && phones.getCount() > 0) viewContacts(update, phones.getCount(),manual);
+                        if (snd_sms && sms.getCount() > 0) viewSMS(update, sms.getCount(),manual);
+                        working = false;
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return tries;
+
+                } else {
+                    Log.d("MyLog", "Update can't find");
+                    makeDB(true);
+                    tries++;
+                    //return tries;
+
                 }
-
-            });
-
-            Thread.sleep(4000);
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-            progressBar.setVisibility(ProgressBar.VISIBLE);
-
-
-            if (update > 0) {
-                tries++;
-                try {
-                    if (snd_ph && phones.getCount() > 0) viewContacts(update, phones.getCount());
-                    if (snd_sms && sms.getCount() > 0) viewSMS(update, sms.getCount());
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return tries;
+                phones.close();// close cursor
 
             } else {
-                Log.d("MyLog", "Update can't find");
-                makeDB();
-                tries++;
-                //return tries;
-
+               if(manual) total.setText(getString(R.string.nothing));
             }
-            phones.close();// close cursor
 
-        } else {
-            total.setText(getString(R.string.nothing));
-        }
-
-        return tries;
+            return tries;
+        } else{ if (manual) total.setText("Still working"); }
+        return 1;
     }
 
+    public void new_contacts()
+    {
+        getContentResolver()
+                .registerContentObserver(
+                        ContactsContract.Contacts.CONTENT_URI, true,
+                        new MyCOntentObserver());
+
+    }
+    public class MyCOntentObserver extends ContentObserver {
+        public MyCOntentObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            if (!selfChange) {
+
+                Log.d("New_contact","Y");
+                try {
+                    makeDB(false);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //return 2;
+            }
+            //return 1;
+        }
+
+        @Override
+        public boolean deliverSelfNotifications() {
+            return true;
+        }
+    }
     public static boolean isNumeric(String str) {
         for (char c : str.toCharArray()) {
             if (!Character.isDigit(c)) return false;
