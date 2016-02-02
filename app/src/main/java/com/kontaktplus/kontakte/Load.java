@@ -18,13 +18,16 @@ import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -433,6 +436,25 @@ public class Load extends Activity {
             Intent intent = new Intent(this, Load.class);
             intent.putExtra("user_", user_id);
             startActivity(intent);
+        }
+
+        if (item.getItemId() == R.id.item2 || item.getItemId() == R.id.reg_aa) {
+            final String names[] = {getString(R.string.english), getString(R.string.russian),getString(R.string.ro),getString(R.string.ukr)};
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(Load.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = (View) inflater.inflate(R.layout.list, null);
+            alertDialog.setView(convertView);
+            alertDialog.setTitle(getString(R.string.action_lang));
+            final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+            lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, names);
+            lv.setAdapter(adapter);
+
+            alertDialog.show();
+
+
+
         }
         return true;
     }

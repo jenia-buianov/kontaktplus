@@ -6,13 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -234,6 +238,28 @@ public class RegActivity extends Activity{
         if (item.getItemId() == R.id.item1) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+        }
+        if (item.getItemId() == R.id.item3) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.kontaktplus.in"));
+            startActivity(browserIntent);
+        }
+        if (item.getItemId() == R.id.item2 || item.getItemId() == R.id.reg_aa) {
+            final String names[] = {getString(R.string.english), getString(R.string.russian),getString(R.string.ro),getString(R.string.ukr)};
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(RegActivity.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = (View) inflater.inflate(R.layout.list, null);
+            alertDialog.setView(convertView);
+            alertDialog.setTitle(getString(R.string.action_lang));
+            final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
+            lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, names);
+            lv.setAdapter(adapter);
+
+            alertDialog.show();
+
+
+
         }
 
         return true;

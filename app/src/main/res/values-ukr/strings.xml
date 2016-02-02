@@ -1,0 +1,85 @@
+﻿<resources>
+    <string name="app_name">KONTAKT PLUS</string>
+
+    <string name="action_settings">Налаштування</string>
+    <string name="action_lang">Мова</string>
+    <string name="action_reg">Реєстрація</string>
+    <string name="action_log">Вхід</string>
+    <string name="action_exit">Вихід</string>
+    
+
+    <string name="close">Закрити</string>
+    <string name="Off_sinh" />
+    <string name="on_sinh" />
+    <string name="email">E-mail</string>
+    <string name="password_valur">Пароль</string>
+    <string name="number_text">Номер телефону</string>
+    <string name="reg_text_button">РЕЄСТРАЦІЯ</string>
+    <string name="registration_vl">РЕЄСТРАЦІЯ</string>
+    <string name="save_button_text">ЗБЕРЕГТИ</string>
+    <string name="change_title_text">ЗМІНИТИ НАЛАШТУВАННЯ</string>
+    <string name="language_title">МОВИ</string>
+    <string name="english_title">English</string>
+    <string name="russian_titl">Русский</string>
+    <string name="enter_button">Вхід</string>
+    <string name="phone_val">Телефон</string>
+    <string name="email_val">E-mail</string>
+    <string name="pass_val">Пароль</string>
+    <string name="reg_Valll">Реєстрація</string>
+    <string name="reg_vall">РЕЄСТРАЦІЯ</string>
+    <string name="login_button">ВХІД</string>
+    <string name="autorize">Авторизація</string>
+    <string name="total">Ласка натисніть на кнопку</string>
+    <string name="uploading">Завантаження</string>
+    <string name="title_activity_update">UpdateActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="item1">Item1</string>
+    <string name="item2">Item2</string>
+    <string name="item3">Item3</string>
+    <string name="item4">Item4</string>
+    <string name="title_activity_notific">NotificActivity</string>
+    <string name="title_activity_load">Завантаження</string>
+    <string name="please_press">Ласка натисніть на кнопку для старту</string>
+    <string name="load_updates">Завантажити збереження</string>
+    <string name="warnin_update">Ласка виберіть версію збереження. Памятайте що всі дані можуть бути замінені даними з сервера</string>
+    <string name="autorize_">Авторизація</string>
+    <string name="reg_mail">Email</string>
+    <string name="password_">Пароль</string>
+    <string name="registartion">Реєстрація</string>
+    <string name="wrning_reg">Увага! Реєструючись ви приймаєте угоду про зберігання даних на нашому сервері. Інформація абсолютно конфіденційна</string>
+    <string name="dellcont">Видалити дані і закачати з сервера</string>
+    <string name="update_string">Оновление</string>
+    <string name="warning_loading">Завантаження почалася. Ласка не закривайте додаток!</string>
+    <string name="agree">Я згоден</string>
+    <string name="internet_error">Помилка зєднання</string>
+    <string name="connection_error">Перевірте підключення до інтернету</string>
+    <string name="again">Спробувати знову</string>
+    <string name="contacts_will">Контакти будуть відправлені на сервер</string>
+    <string name="contacts_willnot">Контакти не будуть відправлені на сервер</string>
+    <string name="sms_will">СМС будуть відправлені на сервер</string>
+    <string name="sms_willnot">СМС не будуть відправлені на сервер</string>
+    <string name="notlogged">Ви ще не авторизовані</string>
+    <string name="sms_updated"> СМС збережено</string>
+    <string name="contacts_updated"> контактів збережено</string>
+    <string name="nothing">Нічого не вибрано</string>
+    <string name="finished">ЗАГРУЗКА ЗАВЕРШЕНА</string>
+    <string name="were_added"> контакті додано</string>
+    <string name="sms_were_added"> смс додано</string>
+    <string name="ok">ok</string>
+    <string name="response">ВІДПОВІДЬ СЕРВЕРА</string>
+    <string name="not_all">Ви не заповнили всі дані</string>
+    <string name="reg_error">ПОМИЛКА РЕЄСТРАЦІЇ</string>
+    <string name="atorize_error">ПОМИЛКА РЕЄСТРАЦІЇ</string>
+    <string name="desc_phone_book">Ваша записная книга будет сохраненна на сервере</string>
+    <string name="desc_sms">Ваші повідомлення будуть збережені на сервері</string>
+    <string name="phone_book">Записна книжка</string>
+    <string name="english" >English</string>
+    <string name="russian" >Русский</string>
+    <string name="ro" >Română</string>
+    <string name="ukr" >Українська</string>
+
+
+
+</resources>

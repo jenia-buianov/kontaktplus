@@ -24,7 +24,9 @@
     
     <string name="close" >Close</string>
     <string name="english" >English</string>
-    <string name="russian" >Russian</string>
+    <string name="russian" >Русский</string>
+    <string name="ro" >Română</string>
+    <string name="ukr" >Українська</string>
     <string name="Off_sinh" />
     <string name="on_sinh" />
     <string name="email">E-mail</string>

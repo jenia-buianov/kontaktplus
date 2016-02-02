@@ -462,7 +462,7 @@ public class MainActivity extends Activity {
             startActivity(intent);
         }
         if (item.getItemId() == R.id.item2 || item.getItemId() == R.id.reg_aa) {
-            final String names[] = {getString(R.string.english), getString(R.string.russian)};
+            final String names[] = {getString(R.string.english), getString(R.string.russian),getString(R.string.ro),getString(R.string.ukr)};
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
             LayoutInflater inflater = getLayoutInflater();
@@ -473,13 +473,6 @@ public class MainActivity extends Activity {
             lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, names);
             lv.setAdapter(adapter);
-            Button btnChecked = (Button) lv.findViewById(R.id.btnChecked);
-            btnChecked.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View arg0) {
-                    Log.d("Languange_", "checked: " + names[lv.getCheckedItemPosition()]);
-                }
-            });
 
             alertDialog.show();
 

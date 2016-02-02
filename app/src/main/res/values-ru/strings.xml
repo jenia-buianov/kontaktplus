@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">KONTAKT PLUS</string>
 
     <string name="action_settings">Настройки</string>
@@ -6,21 +6,7 @@
     <string name="action_reg">Регистрация</string>
     <string name="action_log">Вход</string>
     <string name="action_exit">Выход</string>
-    <string-array name="entries">
-        <item>one</item>
-        <item>two</item>
-        <item>three</item>
-    </string-array>
-    <string-array name="entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
     
-    <string-array name="language">
-        <item>Английский</item>
-        <item>Русский</item>
-    </string-array>
 
     <string name="close" >Close</string>
     <string name="Off_sinh" />
@@ -67,18 +53,18 @@
     <string name="update_string">Обновление</string>
     <string name="warning_loading">Загрузка началась. Пожалуйста не закрывайте приложение!</string>
     <string name="agree">Я согласен</string>
-    <string name="internet_error">Интернет отсутствует</string>
+    <string name="internet_error">Ошибка соединения</string>
     <string name="connection_error">Проверьте подключение к интернету</string>
     <string name="again">ПОПРОБОВАТЬ СНОВА</string>
-    <string name="contacts_will">Контакты будут отправленны на сервер</string>
-    <string name="contacts_willnot">Контакты не будут отправленны на сервер</string>
-    <string name="sms_will">СМС будут отправленны на сервер</string>
-    <string name="sms_willnot">СМС не будут отправленны на сервер</string>
-    <string name="notlogged">Вы еще не авторизированны</string>
-    <string name="sms_updated"> СМС сохраненно</string>
-    <string name="contacts_updated"> контактов сохраненно</string>
-    <string name="nothing">Ничего не выброанно</string>
-    <string name="finished">ЗАГРУЗКА ЗАВЕРШЕННА</string>
+    <string name="contacts_will">Контакты будут отправлены на сервер</string>
+    <string name="contacts_willnot">Контакты не будут отправлены на сервер</string>
+    <string name="sms_will">СМС будут отправлены на сервер</string>
+    <string name="sms_willnot">СМС не будут отправлены на сервер</string>
+    <string name="notlogged">Вы еще не авторизированы</string>
+    <string name="sms_updated"> СМС сохранено</string>
+    <string name="contacts_updated"> контактов сохранено</string>
+    <string name="nothing">Ничего не выброано</string>
+    <string name="finished">ЗАГРУЗКА ЗАВЕРШЕНА</string>
     <string name="were_added"> контактов добаленно\n</string>
     <string name="sms_were_added"> смс добавленно</string>
     <string name="ok">ok</string>
@@ -89,8 +75,10 @@
     <string name="desc_phone_book">Ваша записная книга будет сохраненна на сервере</string>
     <string name="desc_sms">Ваши сообщения будут сохраненны на сервере</string>
     <string name="phone_book">Записная книга</string>
-    <string name="english" >Английский</string>
+    <string name="english" >English</string>
     <string name="russian" >Русский</string>
+    <string name="ro" >Română</string>
+    <string name="ukr" >Українська</string>
 
 
 
