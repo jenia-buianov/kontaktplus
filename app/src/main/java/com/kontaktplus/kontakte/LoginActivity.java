@@ -43,6 +43,7 @@ public class LoginActivity extends Activity {
     String pass_val = "", email_val = "", res = "";
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
+    public static final String APP_PREFERENCES_COUNTER2 = "first_visit";
     private SharedPreferences mSettings;
     EditText mail;
     EditText pass;
@@ -195,6 +196,8 @@ public class LoginActivity extends Activity {
                 } else {
                     SharedPreferences.Editor editor = mSettings.edit();
                     editor.putString(APP_PREFERENCES_COUNTER, res);
+                    editor.putString(APP_PREFERENCES_COUNTER2, "y");
+
                     //editor.apply();
                     editor.commit();
 
@@ -202,6 +205,7 @@ public class LoginActivity extends Activity {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("user_", res);
+                    //intent.putExtra("first_visit", true);
 
 
                     startActivity(intent);

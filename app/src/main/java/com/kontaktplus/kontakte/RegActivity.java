@@ -33,6 +33,7 @@ public class RegActivity extends Activity{
 
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
+    public static final String APP_PREFERENCES_COUNTER2 = "first_visit";
     private SharedPreferences mSettings;
 
     Button regButton;
@@ -196,6 +197,8 @@ public class RegActivity extends Activity{
                 }else {
                     SharedPreferences.Editor editor = mSettings.edit();
                     editor.putString(APP_PREFERENCES_COUNTER, res);
+
+                    editor.putString(APP_PREFERENCES_COUNTER2, "y");
                     editor.apply();
                     Intent intent = new Intent(RegActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -65,7 +65,7 @@
     <string name="contacts_updated"> контактів збережено</string>
     <string name="nothing">Нічого не вибрано</string>
     <string name="finished">ЗАГРУЗКА ЗАВЕРШЕНА</string>
-    <string name="were_added"> контакті додано</string>
+    <string name="were_added"> контакті додано\n</string>
     <string name="sms_were_added"> смс додано</string>
     <string name="ok">ok</string>
     <string name="response">ВІДПОВІДЬ СЕРВЕРА</string>

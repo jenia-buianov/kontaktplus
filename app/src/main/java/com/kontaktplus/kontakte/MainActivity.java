@@ -49,11 +49,12 @@ public class MainActivity extends Activity {
     NotificationManager manager;
     Notification myNotication;
     public boolean working = false;
+    public String first = "n";
 
 
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
-    public final static String FILE_NAME = "filename";
+    public static final String APP_PREFERENCES_COUNTER2 = "first_visit";
 
     private SharedPreferences mSettings;
 
@@ -71,14 +72,16 @@ public class MainActivity extends Activity {
         if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
             // Получаем число из настроек
             user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
+            first = mSettings.getString(APP_PREFERENCES_COUNTER2, "");
             if (user_id.length() == 0) user_id = null;
+            if (first!="y") first ="n";
             //Toast.makeText(MainActivity.this, user_id, Toast.LENGTH_LONG).show();
 
 
         }
 
         setContentView(R.layout.main);
-        if (user_id!=null)
+        if (user_id!=null&&first=="y")
         {
             final Timer myTimer = new Timer();
             myTimer.schedule(new TimerTask() {
@@ -87,7 +90,7 @@ public class MainActivity extends Activity {
                     new_contacts();
                 }
 
-            }, 10000, 10000);
+            }, 10000, 60000);
         }
 
         tvInfo = (TextView) findViewById(R.id.tvInfo);
@@ -176,13 +179,20 @@ public class MainActivity extends Activity {
         else text += "\n" + getString(R.string.sms_willnot);
         if (user_id == null) text = getString(R.string.notlogged);
         total.setText(text);
+        if (!snd_ph&&!snd_sms&&user_id!=null)
+        {
+            Intent intent = new Intent(this, PrefActivity.class);
+            intent.putExtra("user_", user_id);
+            startActivity(intent);
+        }
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
             // Получаем число из настроек
             user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
             if (user_id.length() == 0) user_id = null;
-
+            first = mSettings.getString(APP_PREFERENCES_COUNTER2, "");
+            if (first!="y"){first="n";}
 
         }
     }
@@ -208,6 +218,7 @@ public class MainActivity extends Activity {
         Log.d("viewSMS","STARTED");
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
         int total_ = 0;
+        String date2_ ="";
         Log.d("viewSMS", String.valueOf(count_));
         if (cursor.moveToFirst()) { // must check the result to prevent exception
             String date_ = "";
@@ -216,8 +227,8 @@ public class MainActivity extends Activity {
 
                 // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (cursor.moveToNext());
-            //inserttext(count_+" SMS inbox updated");
-            sendSMS(date_, update);
+            //inserttext(count_+" SMS inbox updated";
+            date2_ = date_;
         }
 
         Uri sentURI = Uri.parse("content://sms/sent");
@@ -231,10 +242,11 @@ public class MainActivity extends Activity {
                 //inserttext(c.getString(cursor.getColumnIndexOrThrow("address")).toString());
                 // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (c.moveToNext());
-            sendSMS(date_2, update);
+            date2_+=date_2;
         }
+        sendSMS(date2_, update);
         total_ = c.getCount() + count_;
-        if (manual) inserttext(total_ + getString(R.string.sms_updated));
+        if (manual) inserttext(total_ +" "+ getString(R.string.sms_updated));
 
     }
 
@@ -256,11 +268,12 @@ public class MainActivity extends Activity {
             Log.d("view", count[0] + ". " + name + " was Updated");
             count[0]++;
         }
-        if (manual) inserttext(count_ + getString(R.string.contacts_updated));
+        if (manual) inserttext(count_ +" "+ getString(R.string.contacts_updated));
     }
 
     private boolean sendSMS(String mess, int update) throws IOException {
         final boolean[] bl = {false};
+        Log.d("send_sms", mess);
         String url1 = "http://kontaktplus.in/getms";
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormEncodingBuilder()
@@ -296,7 +309,9 @@ public class MainActivity extends Activity {
                 res = response.body().string();
 
                 bl[0] = true;
+
                 Log.d("send_sms", "YES");
+
                 //Log.d("MyLog", name+ "-----------"+res);
                 //count[0]++;
 
@@ -362,6 +377,7 @@ public class MainActivity extends Activity {
         Log.d("MakeDB","START");
 
         if (!working) {
+            inserttext("");
             Log.d("MakeDB_working","true");
             working = true;
             ContentResolver cr = getContentResolver();
@@ -440,11 +456,15 @@ public class MainActivity extends Activity {
                 phones.close();// close cursor
 
             } else {
-               if(manual) total.setText(getString(R.string.nothing));
+               if(manual) {total.setText(getString(R.string.nothing));
+                   Intent intent = new Intent(this, PrefActivity.class);
+                   intent.putExtra("user_", user_id);
+                   startActivity(intent);
+               }
             }
 
             return tries;
-        } else{ if (manual) total.setText("Still working"); }
+        } else{ if (manual) total.setText(getString(R.string.still)); }
         return 1;
     }
 

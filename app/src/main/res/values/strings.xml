@@ -46,8 +46,8 @@
     <string name="reg_Valll">Register</string>
     <string name="reg_vall">REGISTRATION</string>
     <string name="login_button">SING IN</string>
-    <string name="autorize">Autorization</string>
-    <string name="total">PLEASE PRES BUTTON</string>
+    <string name="autorize">Authorization</string>
+    <string name="total">PLEASE PRESS BUTTON</string>
     <string name="uploading">Uploading</string>
     <string name="title_activity_update">UpdateActivity</string>
 
@@ -61,17 +61,17 @@
     <string name="title_activity_load">Load</string>
     <string name="please_press">Please press the button for start</string>
     <string name="load_updates">Load updates</string>
-    <string name="warnin_update">Please select your version for update. Remeber that all your dates will be deleted and rewrited by the dates from server</string>
-    <string name="autorize_">Autorization</string>
+    <string name="warnin_update">Please select your version of update. Remember that all your dates will be deleted and rewrited by the dates from server</string>
+    <string name="autorize_">Authorization</string>
     <string name="reg_mail">Email</string>
     <string name="password_">Password</string>
     <string name="registartion">Registration</string>
-    <string name="wrning_reg">Be carefull! Making registration your contacts and sms will be send t othe server. This data is absolutly confidience</string>
+    <string name="wrning_reg">Be careful! Making registration your contacts and sms will be send to the server. This data is absolutely confidential</string>
     <string name="dellcont">Delete Contacts and write from server</string>
     <string name="update_string">Update</string>
     <string name="warning_loading">Loading has started. Please do not close the app. You will see the result in the end</string>
     <string name="agree">Ok, I agree</string>
-    <string name="internet_error">INTERNET ERORR</string>
+    <string name="internet_error">INTERNET ERROR</string>
     <string name="connection_error">You do not have connection with internet</string>
     <string name="again">TRY AGAIN</string>
     <string name="contacts_will">Contacts will be send to server</string>
@@ -93,5 +93,6 @@
     <string name="desc_phone_book">Your phone book will be saved on the server</string>
     <string name="desc_sms">Your sms will be saved on the server</string>
     <string name="phone_book">Phone Book</string>
+    <string name="still">Collecting contacts/sms is not finished</string>
 
 </resources>

@@ -358,18 +358,20 @@ public class Load extends Activity {
                     String dt = message[3].toString();
                     String seen = message[4].toString();
                     String snd = "";
+                    int type = 0;
                     Log.d("SendMS",ms);
                     Log.d("Type SMS ",from);
 
 
-                    if (from=="me") {snd = "sent";} else {snd = "inbox";}
+                    if (from=="me") {type=2;snd = "sent";} else {type=1;snd = "inbox";}
                     Log.d("Send_",snd);
                     Uri uri = Uri.parse("content://sms/"+snd);
                     ContentValues cv2 = new ContentValues();
                     cv2.put("address", phone);
                     cv2.put("date", dt);
-                    cv2.put("read", seen);
-                    cv2.put("type", 2);
+                    cv2.put("seen", seen);
+                    //cv2.put("seen", seen);
+                    cv2.put("type", type);
                     cv2.put("body", ms);
                     getContentResolver().insert(uri, cv2);
                     /** This is very important line to solve the problem */

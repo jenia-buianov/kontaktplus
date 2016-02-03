@@ -8,7 +8,7 @@
     <string name="action_exit">Выход</string>
     
 
-    <string name="close" >Close</string>
+    <string name="close" >Закрыть</string>
     <string name="Off_sinh" />
     <string name="on_sinh" />
     <string name="email">E-mail</string>
@@ -79,6 +79,7 @@
     <string name="russian" >Русский</string>
     <string name="ro" >Română</string>
     <string name="ukr" >Українська</string>
+    <string name="still" >Сбор контактов/сообщений ещё не завершен</string>
 
 
 
