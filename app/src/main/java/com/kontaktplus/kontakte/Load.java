@@ -47,15 +47,16 @@ public class Load extends Activity {
     SharedPreferences sp;
     Button sinhButton;
     TextView tvInfo;
-    String user_id = null, res = "", last_upd = "";
+    String user_id = null, res = "", group="";
     LinearLayout bd;
+    boolean additioanl = false;
 
 
 
 
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
-    public final static String FILE_NAME = "filename";
+    public static final String APP_PREFERENCES_COUNTER3 = "group";
 
     private SharedPreferences mSettings;
 
@@ -71,25 +72,29 @@ public class Load extends Activity {
         if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
             // Получаем число из настроек
             user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
+            group = mSettings.getString(APP_PREFERENCES_COUNTER3, "");
+            //if (group=="p") additioanl = true;
             if (user_id.length() == 0) user_id = null;
             //Toast.makeText(MainActivity.this, user_id, Toast.LENGTH_LONG).show();
 
 
         }
         try {
-            Load_upd();
+            Load_upd(5);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void Load_upd() throws IOException {
+    private void Load_upd(int limit) throws IOException {
 
+        bd = (LinearLayout) findViewById(R.id.l_layout);
         String url1 = "http://kontaktplus.in/ld_upd";
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormEncodingBuilder()
                 .add("uid", user_id)
+                .add("limit", String.valueOf(limit))
                 .build();
         Request request = new Request.Builder()
                 .url(url1)
@@ -127,9 +132,12 @@ public class Load extends Activity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        bd = (LinearLayout) findViewById(R.id.l_layout);
+        bd = (LinearLayout) findViewById(R.id.l_layout2);
+        bd.removeAllViews();
         String[] split = Load_version.split("/");
         int k = 0;
+        Log.d("Resp",Load_version);
+
         while(k<split.length)
         {
 
@@ -207,6 +215,57 @@ public class Load extends Activity {
 
 
             k++;
+        }
+        Log.d("Resp", String.valueOf(split.length));
+        Log.d("Resp", group);
+        Log.d("Resp", String.valueOf(additioanl));
+        if (String.valueOf(split.length)=="5" && group=="p") Log.d("RESP","FOUND");
+
+        if (Integer.parseInt(group)==1)
+        {
+
+            Log.d("Resp","y");
+            int padding_in_dp = 10;  // 6 dps
+            final float scale = getResources().getDisplayMetrics().density;
+            int padding_in_px = (int) (padding_in_dp * scale + 0.5f);
+            TextView valueTV1 = new TextView(this);
+            //valueTV1.setText("Something new");
+            valueTV1.setId(k+1);
+            valueTV1.setBackgroundColor(Color.parseColor("#ffffff"));
+            valueTV1.setPadding(padding_in_px, padding_in_px, padding_in_px, padding_in_px);
+            valueTV1.setTextColor(Color.parseColor("#ffffff"));
+            valueTV1.setGravity(Gravity.CENTER_HORIZONTAL);
+            valueTV1.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+            TextView valueTV = new TextView(this);
+            valueTV.setText(getString(R.string.adition));
+            valueTV.setId(k+1);
+            valueTV.setBackgroundColor(Color.parseColor("#f62e24"));
+            valueTV.setPadding(padding_in_px, padding_in_px, padding_in_px, padding_in_px);
+            valueTV.setTextColor(Color.parseColor("#ffffff"));
+            valueTV.setGravity(Gravity.CENTER_HORIZONTAL);
+            valueTV.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+            valueTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                    progressBar.setVisibility(ProgressBar.VISIBLE);
+
+                    cd = new ConnectionDetector(getApplicationContext());
+                    isInternetPresent = cd.ConnectingToInternet();
+
+                    //Проверяем Интернет статус:
+                    if (isInternetPresent) {
+                        try {
+                            Load_upd(0);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            bd.addView(valueTV1);
+            bd.addView(valueTV);
         }
 
 

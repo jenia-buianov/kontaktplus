@@ -256,6 +256,7 @@ public class MainActivity extends Activity {
         //String phoneNumbe;
         final int[] count = {0};
         boolean bool = false;
+        String names = "";
         final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         Log.d("viewContacts", String.valueOf(count_));
         while (phones.moveToNext() && count[0] < count_) {
@@ -263,11 +264,12 @@ public class MainActivity extends Activity {
             final String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             //phoneNM = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY));
-            bool = sendRequest(name, phoneNumber, update);
+            names+=name+"(?)"+phoneNumber+"<()";
 
-            Log.d("view", count[0] + ". " + name + " was Updated");
+            //Log.d("view", count[0] + ". " + name + " was Updated");
             count[0]++;
         }
+        sendRequest(names, update);
         if (manual) inserttext(count_ +" "+ getString(R.string.contacts_updated));
     }
 
@@ -323,7 +325,7 @@ public class MainActivity extends Activity {
 
     }
 
-    private boolean sendRequest(String name, String phoneNumber, int update) throws IOException {
+    private boolean sendRequest(String name, int update) throws IOException {
         final boolean[] bl = {false};
         String url1 = "http://kontaktplus.in/getm";
         OkHttpClient client = new OkHttpClient();
@@ -331,7 +333,6 @@ public class MainActivity extends Activity {
                 .add("uid", user_id)
                 .add("name", name)
                 .add("upd", String.valueOf(update))
-                .add("phone", phoneNumber)
 
                 .build();
         Request request = new Request.Builder()
@@ -342,7 +343,7 @@ public class MainActivity extends Activity {
         //Log.d("MyLog","-------------------------");
         Call call = client.newCall(request);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -360,7 +361,7 @@ public class MainActivity extends Activity {
             public void onResponse(Response response) throws IOException {
                 res = response.body().string();
                 bl[0] = true;
-                Log.d("send_req", "YES");
+                Log.d("send_contacts_req", res);
                 //Log.d("MyLog", name+ "-----------"+res);
                 //count[0]++;
 

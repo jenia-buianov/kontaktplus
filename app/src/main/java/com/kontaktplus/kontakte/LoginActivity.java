@@ -40,10 +40,11 @@ public class LoginActivity extends Activity {
     ConnectionDetector cd;
 
     // Conection to Internet /
-    String pass_val = "", email_val = "", res = "";
+    String pass_val = "", email_val = "", res = "", group="";
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
     public static final String APP_PREFERENCES_COUNTER2 = "first_visit";
+    public static final String APP_PREFERENCES_COUNTER3 = "group";
     private SharedPreferences mSettings;
     EditText mail;
     EditText pass;
@@ -167,6 +168,14 @@ public class LoginActivity extends Activity {
             public void onResponse(Response response) throws IOException {
                 res = response.body().string();
                 res = res.toString();
+                String[] es = res.split("/");
+                Log.d("MyLogin",res);
+                if (es.length>1) {
+                    res = es[0];
+                    group = es[1];
+                    Log.d("MyLogin", res);
+                    Log.d("MyLogin", group);
+                }
                 if (res.length() == 0 || !isNumeric(res)) {
                     Log.d("Error ", res);
                     runOnUiThread(new Runnable() {
@@ -197,6 +206,7 @@ public class LoginActivity extends Activity {
                     SharedPreferences.Editor editor = mSettings.edit();
                     editor.putString(APP_PREFERENCES_COUNTER, res);
                     editor.putString(APP_PREFERENCES_COUNTER2, "y");
+                    editor.putString(APP_PREFERENCES_COUNTER3, group);
 
                     //editor.apply();
                     editor.commit();

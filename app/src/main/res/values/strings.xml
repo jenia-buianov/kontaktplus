@@ -36,7 +36,7 @@
     <string name="registration_vl">REGISTRATION</string>
     <string name="save_button_text">SAVE</string>
     <string name="change_title_text">CHANGE SETTINGS</string>
-    <string name="language_title">LANGUAGES</string>
+    <string name="language_title">AVAILABLE LANGUAGES</string>
     <string name="english_title">English</string>
     <string name="russian_titl">Russian</string>
     <string name="enter_button">SING IN</string>
@@ -94,5 +94,6 @@
     <string name="desc_sms">Your sms will be saved on the server</string>
     <string name="phone_book">Phone Book</string>
     <string name="still">Collecting contacts/sms is not finished</string>
+    <string name="adition">Get all saves</string>
 
 </resources>

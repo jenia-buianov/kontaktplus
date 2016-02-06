@@ -18,7 +18,7 @@
     <string name="registration_vl">ÎNREGISTARE</string>
     <string name="save_button_text">SALVARE</string>
     <string name="change_title_text">EDITAREA SETĂRILOR</string>
-    <string name="language_title">LIMBI</string>
+    <string name="language_title">LIMBI DISPONIBILE</string>
     <string name="english_title">English</string>
     <string name="russian_titl">Русский</string>
     <string name="enter_button">Întrare</string>
@@ -79,6 +79,8 @@
     <string name="russian" >Русский</string>
     <string name="ro" >Română</string>
     <string name="ukr" >Українська</string>
+    <string name="adition">Toate salvări</string>
+
 
 
 
