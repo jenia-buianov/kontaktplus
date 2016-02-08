@@ -40,6 +40,7 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Load extends Activity {
 
@@ -94,6 +95,7 @@ public class Load extends Activity {
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormEncodingBuilder()
                 .add("uid", user_id)
+                .add("lang", Locale.getDefault().toString())
                 .add("limit", String.valueOf(limit))
                 .build();
         Request request = new Request.Builder()
@@ -281,6 +283,7 @@ public class Load extends Activity {
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormEncodingBuilder()
                 .add("uid", user_id)
+                .add("lang", Locale.getDefault().toString())
                 .add("upd", String.valueOf(update))
 
                 .build();

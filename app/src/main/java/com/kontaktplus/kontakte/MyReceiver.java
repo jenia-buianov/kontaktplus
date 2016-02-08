@@ -11,9 +11,9 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
-            Intent i = new Intent(context, MainActivity.class);
+            Intent i = new Intent(context, MakeService.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+            context.startService(i);
         }
     }
 }

@@ -5,11 +5,7 @@
     android:background="#fff"
     android:clickable="true">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:visibility="invisible"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -72,6 +68,7 @@
             android:padding="10dp"
             android:text="">
         </TextView>
+
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>

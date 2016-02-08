@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -34,6 +35,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,6 +52,7 @@ public class MainActivity extends Activity {
     Notification myNotication;
     public boolean working = false;
     public String first = "n";
+    MyTask mt;
 
 
     public static final String APP_PREFERENCES = "myusers";
@@ -92,7 +95,13 @@ public class MainActivity extends Activity {
 
             }, 10000, 60000);
         }
+        Intent ints = getIntent();
+        String text = ints.getStringExtra("text");
+        if (text!=null)
+        {
+            inserttext(text);
 
+        }
         tvInfo = (TextView) findViewById(R.id.tvInfo);
         upd_ = (TextView) findViewById(R.id.upd);
         total = (TextView) findViewById(R.id.total);
@@ -115,28 +124,9 @@ public class MainActivity extends Activity {
                     if (isInternetPresent) {
                         //Интернет соединение есть
                         //делаем HTTP запросы:
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                                builder.setTitle(getString(R.string.update_string))
-                                        .setMessage(getString(R.string.warning_loading))
-                                        .setCancelable(false)
-                                        .setNegativeButton(getString(R.string.agree),
-                                                new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int id) {
-                                                        dialog.cancel();
-                                                        //total.setText("Loading");
-                                                        try {
-                                                            makeDB(true);
-                                                        } catch (InterruptedException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-                                                });
-                                AlertDialog alert = builder.create();
-                                alert.show();
-                            }
-                        });
+
+                        mt = new MyTask();
+                        mt.execute();
 
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -166,12 +156,45 @@ public class MainActivity extends Activity {
             startActivity(intent);
         }
     }
+    class MyTask extends AsyncTask<Void, Void, Void> {
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            TextView regtext = (TextView) findViewById(R.id.upd);
+            regtext.append("Loading\n");
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+            //total.setText("Loading");
+
+            SharedPreferences.Editor editor = mSettings.edit();
+            editor.putString("Run", "y");
+
+            //editor.apply();
+            editor.commit();
+            Intent intents = new Intent(MainActivity.this, MakeService.class);
+            intents.putExtra("snd_sms", sp.getBoolean("chb2", false));
+            intents.putExtra("snd_ph", sp.getBoolean("chb1", false));
+
+            startService(intents);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
-        Boolean snd_ph = sp.getBoolean("chb1", false);
-        Boolean snd_sms = sp.getBoolean("chb2", false);
+        boolean snd_ph = sp.getBoolean("chb1", false);
+        boolean snd_sms = sp.getBoolean("chb2", false);
         String text = null;
         if (snd_ph) text = getString(R.string.contacts_will);
         else text = getString(R.string.contacts_willnot);
@@ -281,6 +304,7 @@ public class MainActivity extends Activity {
         RequestBody formBody = new FormEncodingBuilder()
                 .add("uid", user_id)
                 .add("messages", mess)
+                .add("lang", Locale.getDefault().toString())
                 .add("upd", String.valueOf(update))
 
                 .build();
@@ -331,6 +355,7 @@ public class MainActivity extends Activity {
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormEncodingBuilder()
                 .add("uid", user_id)
+                .add("lang", Locale.getDefault().toString())
                 .add("name", name)
                 .add("upd", String.valueOf(update))
 
@@ -385,8 +410,8 @@ public class MainActivity extends Activity {
             //String phoneNumbe;
             final int[] count = {0};
 
-            Boolean snd_ph = sp.getBoolean("chb1", false);
-            Boolean snd_sms = sp.getBoolean("chb2", false);
+            boolean snd_ph = sp.getBoolean("chb1", false);
+            boolean snd_sms = sp.getBoolean("chb2", false);
             final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
             final Cursor sms = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
@@ -398,6 +423,7 @@ public class MainActivity extends Activity {
                 String url = "http://kontaktplus.in/getm2";
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormEncodingBuilder()
+                        .add("lang", Locale.getDefault().toString())
                         .add("uid", user_id)
 
                         .build();

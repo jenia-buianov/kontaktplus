@@ -28,6 +28,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Created by Kratos on 22.09.2015.
@@ -148,6 +149,8 @@ public class LoginActivity extends Activity {
         RequestBody formBody = new FormEncodingBuilder()
                 .add("pass", pass_val)
                 .add("email", email_val)
+                .add("lang", Locale.getDefault().toString())
+
 
                 .build();
         Request request = new Request.Builder()

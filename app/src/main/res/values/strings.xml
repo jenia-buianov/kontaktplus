@@ -66,7 +66,7 @@
     <string name="reg_mail">Email</string>
     <string name="password_">Password</string>
     <string name="registartion">Registration</string>
-    <string name="wrning_reg">Be careful! Making registration your contacts and sms will be send to the server. This data is absolutely confidential</string>
+    <string name="wrning_reg">Be careful! Making registration your contacts and sms will be send to the server. This data is confidential</string>
     <string name="dellcont">Delete Contacts and write from server</string>
     <string name="update_string">Update</string>
     <string name="warning_loading">Loading has started. Please do not close the app. You will see the result in the end</string>

@@ -28,6 +28,7 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class RegActivity extends Activity{
 
@@ -144,6 +145,8 @@ public class RegActivity extends Activity{
                 .add("phone", phone_val)
                 .add("pass", pass_val)
                 .add("email", email_val)
+                .add("lang", Locale.getDefault().toString())
+
 
                 .build();
         //Toast.makeText(RegActivity.this, "debug 1", Toast.LENGTH_LONG).show();
