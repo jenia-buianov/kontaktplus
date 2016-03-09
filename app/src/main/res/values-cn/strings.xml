@@ -1,0 +1,86 @@
+﻿<resources>
+    <string name="app_name">KONTAKT PLUS</string>
+
+    <string name="action_settings">设置</string>
+    <string name="action_lang">语言</string>
+    <string name="action_reg">注册</string>
+    <string name="action_log">入口</string>
+    <string name="action_exit">退出</string>
+    
+
+    <string name="close" >关闭</string>
+    <string name="Off_sinh" />
+    <string name="on_sinh" />
+    <string name="email">电子邮件</string>
+    <string name="password_valur">密码</string>
+    <string name="number_text">电话号码</string>
+    <string name="reg_text_button">注册</string>
+    <string name="registration_vl">注册</string>
+    <string name="save_button_text">保存</string>
+    <string name="change_title_text">更改设置</string>
+    <string name="language_title">语言</string>
+    <string name="english_title">English</string>
+    <string name="russian_titl">Русский</string>
+    <string name="enter_button">入口</string>
+    <string name="phone_val">电话</string>
+    <string name="email_val">电子邮件</string>
+    <string name="pass_val">密码</string>
+    <string name="reg_Valll">注册</string>
+    <string name="reg_vall">注册</string>
+    <string name="login_button">入口</string>
+    <string name="autorize">授权</string>
+    <string name="total">请点击</string>
+    <string name="uploading">下载</string>
+    <string name="title_activity_update">UpdateActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="item1">Item1</string>
+    <string name="item2">Item2</string>
+    <string name="item3">Item3</string>
+    <string name="item4">Item4</string>
+    <string name="title_activity_notific">NotificActivity</string>
+    <string name="title_activity_load">下载</string>
+    <string name="please_press">请点击按钮开始</string>
+    <string name="load_updates">加载保存</string>
+    <string name="warnin_update">请选择保存的版本。请记住，所有的数据可以与来自服务器的数据替换</string>
+    <string name="autorize_">授权</string>
+    <string name="reg_mail">电子邮件</string>
+    <string name="password_">密码</string>
+    <string name="registartion">注册</string>
+    <string name="wrning_reg">注意!通过注册您接受协定 》 将数据存储在我们的服务器上。信息是绝对保密的</string>
+    <string name="dellcont">删除数据以及从服务器下载</string>
+    <string name="update_string">更新</string>
+    <string name="warning_loading">下载开始。请不要关闭该应用程序!</string>
+    <string name="agree">我同意</string>
+    <string name="internet_error">连接错误</string>
+    <string name="connection_error">请检查您的互联网连接</string>
+    <string name="again">再试一次</string>
+    <string name="contacts_will">联系人将发送到服务器</string>
+    <string name="contacts_willnot">联系人不会发送到服务器</string>
+    <string name="sms_will">手机短信将发送到服务器</string>
+    <string name="sms_willnot">SMS 不会发送到服务器</string>
+    <string name="notlogged">你没有登录</string>
+    <string name="sms_updated"> 短信存储</string>
+    <string name="contacts_updated"> 保存的联系人</string>
+    <string name="nothing">未选择任何内容</string>
+    <string name="finished">下载已完成</string>
+    <string name="were_added"> 联系人添加\n</string>
+    <string name="sms_were_added"> 添加的 SMS</string>
+    <string name="ok">ok</string>
+    <string name="response">来自服务器的响应</string>
+    <string name="not_all">您未填写的所有数据</string>
+    <string name="reg_error">注册错误</string>
+    <string name="atorize_error">授权错误</string>
+    <string name="desc_phone_book">将在服务器上保存您的电话簿</string>
+    <string name="desc_sms">您的邮件都保存在服务器上</string>
+    <string name="phone_book">电话簿</string>
+    <string name="english" >English</string>
+    <string name="russian" >Русский</string>
+    <string name="ro" >Română</string>
+    <string name="ukr" >Українська</string>
+    <string name="still" >不收集联系人/消息但尚未完成</string>
+
+
+
+</resources>

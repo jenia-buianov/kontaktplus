@@ -1,593 +1,248 @@
 package com.kontaktplus.kontakte;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.ContentResolver;
+import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.ContentObserver;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.os.PersistableBundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
+import com.kontaktplus.kontakte.adapter.SlidingMenuAdapter;
+import com.kontaktplus.kontakte.fragment.Fragment1;
+import com.kontaktplus.kontakte.fragment.Fragment2;
+import com.kontaktplus.kontakte.fragment.Fragment3;
+import com.kontaktplus.kontakte.fragment.Fragment4;
+import com.kontaktplus.kontakte.fragment.Fragment5;
+import com.kontaktplus.kontakte.model.ItemSlideMenu;
 
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
+
+    private List<ItemSlideMenu> ListSliding;
+    private SlidingMenuAdapter adapter;
+    private ListView listViewSliding;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    CatTask cattask;
 
     SharedPreferences sp;
-    Button sinhButton;
-    TextView tvInfo, upd_;
-    String user_id = null, res = "", last_upd = "";
-    TextView total;
-    int update = 0, tries = 0;
-    String phoneNumber, phoneNM;
-    NotificationManager manager;
-    Notification myNotication;
+    String user_id = null;
     public boolean working = false;
-    public String first = "n";
-    MyTask mt;
-
-
+    public String first="n";
     public static final String APP_PREFERENCES = "myusers";
     public static final String APP_PREFERENCES_COUNTER = "user_id";
     public static final String APP_PREFERENCES_COUNTER2 = "first_visit";
 
     private SharedPreferences mSettings;
 
-    // Connection to Internet /
-    Boolean isInternetPresent = false;
-    ConnectionDetector cd;
-
-    // Conection to Internet /
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 
 
-    //int count=0;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+
+
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
-            // Получаем число из настроек
             user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
             first = mSettings.getString(APP_PREFERENCES_COUNTER2, "");
             if (user_id.length() == 0) user_id = null;
             if (first!="y") first ="n";
-            //Toast.makeText(MainActivity.this, user_id, Toast.LENGTH_LONG).show();
-
 
         }
 
-        setContentView(R.layout.main);
-        if (user_id!=null&&first=="y")
-        {
-            final Timer myTimer = new Timer();
-            myTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    new_contacts();
-                }
-
-            }, 10000, 60000);
+        listViewSliding = (ListView)findViewById(R.id.lv_sliding_menu);
+        drawerLayout = (DrawerLayout)findViewById(R.id.main_drawer);
+        ListSliding = new ArrayList<>();
+        if (user_id!=null){
+            ListSliding.add(new ItemSlideMenu(R.mipmap.run, getString(R.string.sync)));
+            ListSliding.add(new ItemSlideMenu(R.mipmap.load2, getString(R.string.get_saves)));
+            ListSliding.add(new ItemSlideMenu(R.mipmap.pref, getString(R.string.action_settings)));
+            ListSliding.add(new ItemSlideMenu(R.mipmap.language, getString(R.string.action_lang)));
+            ListSliding.add(new ItemSlideMenu(R.mipmap.url, getString(R.string.website)));
+        }else {
+            ListSliding.add(new ItemSlideMenu(R.mipmap.login, getString(R.string.login)));
+            ListSliding.add(new ItemSlideMenu(R.mipmap.language, getString(R.string.action_lang)));
+            ListSliding.add(new ItemSlideMenu(R.mipmap.url, getString(R.string.website)));
         }
-        Intent ints = getIntent();
-        String text = ints.getStringExtra("text");
-        if (text!=null)
-        {
-            inserttext(text);
+        adapter = new SlidingMenuAdapter(this,ListSliding);
+        listViewSliding.setAdapter(adapter);
 
-        }
-        tvInfo = (TextView) findViewById(R.id.tvInfo);
-        upd_ = (TextView) findViewById(R.id.upd);
-        total = (TextView) findViewById(R.id.total);
-        sinhButton = (Button) findViewById(R.id.sinhbutton);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(ListSliding.get(0).getTitle());
+        listViewSliding.setItemChecked(0, true);
+        drawerLayout.closeDrawer(listViewSliding);
 
-        sinhButton.setOnClickListener(new View.OnClickListener() {
+        replaceFragment(0);
+        listViewSliding.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-
-                if (user_id == null) {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                } else {
-
-                    cd = new ConnectionDetector(getApplicationContext());
-                    isInternetPresent = cd.ConnectingToInternet();
-
-                    //Проверяем Интернет статус:
-                    if (isInternetPresent) {
-                        //Интернет соединение есть
-                        //делаем HTTP запросы:
-
-                        mt = new MyTask();
-                        mt.execute();
-
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle(getString(R.string.internet_error))
-                                .setMessage(getString(R.string.connection_error))
-                                .setCancelable(false)
-                                .setNegativeButton(getString(R.string.again),
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                    }
-
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setTitle(ListSliding.get(position).getTitle());
+                listViewSliding.setItemChecked(position, true);
+                replaceFragment(position);
+                drawerLayout.closeDrawer(listViewSliding);
             }
         });
-        // получаем SharedPreferences, которое работает с файлом настроек
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,R.string.drawer_opened,R.string.drawer_closed)
+        {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
 
-        if (user_id == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        if (user_id!=null){
+            getMenuInflater().inflate(R.menu.slide_menu_user, menu);
+        }else{
+            getMenuInflater().inflate(R.menu.slide_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(actionBarDrawerToggle.onOptionsItemSelected(item))
+        {
+
+            return true;
+        }
+
+        setTitle(item.getTitle());
+        replaceFragment(item.getOrder());
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void replaceFragment(int pos)
+    {
+        Fragment fragment = null;
+        if (user_id!=null) {
+            switch (pos) {
+                case 0:
+                    // Synchronize
+                    fragment = new Fragment1();
+                    break;
+                case 1:
+                    //Get Saves
+                    fragment = new Fragment2();
+                    break;
+                case 2:
+                    // Settings
+                    fragment = new Fragment3();
+                    break;
+                case 3:
+                    //Languages
+                    fragment = new Fragment4();
+                    break;
+                case 4:
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.kontaktplus.in"));
+                    startActivity(browserIntent);
+                    break;
+                default:
+                    fragment = new Fragment1();
+                    break;
+            }
+        }
+        else {
+            switch (pos) {
+                case 0:
+                    //Login
+                    fragment = new Fragment5();
+                    break;
+                case 1:
+                    //Languages
+                    fragment = new Fragment4();
+                    break;
+                case 2:
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.kontaktplus.in"));
+                    startActivity(browserIntent);
+                    break;
+                default:
+                    fragment = new Fragment5();
+                    break;
+            }
+        }
+
+
+        if (null!=fragment)
+        {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.main_layout, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+            cattask = new CatTask();
+            cattask.execute();
+
         }
     }
-    class MyTask extends AsyncTask<Void, Void, Void> {
+    class CatTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            TextView regtext = (TextView) findViewById(R.id.upd);
-            regtext.append("Loading\n");
-
+            ProgressBar load = (ProgressBar)findViewById(R.id.progressBar);
+            load.setVisibility(ProgressBar.VISIBLE);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-
-
-            //total.setText("Loading");
-
-            SharedPreferences.Editor editor = mSettings.edit();
-            editor.putString("Run", "y");
-
-            //editor.apply();
-            editor.commit();
-            Intent intents = new Intent(MainActivity.this, MakeService.class);
-            intents.putExtra("snd_sms", sp.getBoolean("chb2", false));
-            intents.putExtra("snd_ph", sp.getBoolean("chb1", false));
-
-            startService(intents);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-        }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        boolean snd_ph = sp.getBoolean("chb1", false);
-        boolean snd_sms = sp.getBoolean("chb2", false);
-        String text = null;
-        if (snd_ph) text = getString(R.string.contacts_will);
-        else text = getString(R.string.contacts_willnot);
-        if (snd_sms) text += "\n" + getString(R.string.sms_will);
-        else text += "\n" + getString(R.string.sms_willnot);
-        if (user_id == null) text = getString(R.string.notlogged);
-        total.setText(text);
-        if (!snd_ph&&!snd_sms&&user_id!=null)
-        {
-            Intent intent = new Intent(this, PrefActivity.class);
-            intent.putExtra("user_", user_id);
-            startActivity(intent);
-        }
 
-        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
-            // Получаем число из настроек
-            user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
-            if (user_id.length() == 0) user_id = null;
-            first = mSettings.getString(APP_PREFERENCES_COUNTER2, "");
-            if (first!="y"){first="n";}
+            ProgressBar load = (ProgressBar)findViewById(R.id.progressBar);
+            load.setVisibility(ProgressBar.GONE);
 
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Запоминаем данные
-        SharedPreferences.Editor editor = mSettings.edit();
-        editor.putString(APP_PREFERENCES_COUNTER, user_id);
-        editor.apply();
-    }
-
-
-    public int inserttext(String str) {
-        TextView regtext = (TextView) findViewById(R.id.upd);
-        regtext.append(str + "\n");
-        return 1;
-
-    }
-
-    public void viewSMS(int update, int count_, Boolean manual) throws IOException {
-        Log.d("viewSMS","STARTED");
-        Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
-        int total_ = 0;
-        String date2_ ="";
-        Log.d("viewSMS", String.valueOf(count_));
-        if (cursor.moveToFirst()) { // must check the result to prevent exception
-            String date_ = "";
-            do {
-                date_ += cursor.getString(cursor.getColumnIndexOrThrow("address")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("read")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("date")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("body")).toString() + "(||)-(||)<?)";
-
-                // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
-            } while (cursor.moveToNext());
-            //inserttext(count_+" SMS inbox updated";
-            date2_ = date_;
-        }
-
-        Uri sentURI = Uri.parse("content://sms/sent");
-        String[] reqCols = new String[]{"date_sent", "address", "body", "read"};
-        ContentResolver cr = getContentResolver();
-        Cursor c = cr.query(sentURI, reqCols, null, null, null);
-        if (c.moveToFirst()) { // must check the result to prevent exception
-            String date_2 = "";
-            do {
-                date_2 += c.getString(c.getColumnIndexOrThrow("address")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("read")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("date_sent")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("body")).toString() + "(||)me(||)<?)";
-                //inserttext(c.getString(cursor.getColumnIndexOrThrow("address")).toString());
-                // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
-            } while (c.moveToNext());
-            date2_+=date_2;
-        }
-        sendSMS(date2_, update);
-        total_ = c.getCount() + count_;
-        if (manual) inserttext(total_ +" "+ getString(R.string.sms_updated));
-
-    }
-
-    public void viewContacts(int update, final int count_, Boolean manual) throws IOException {
-        Log.d("viewContacts","STARTED");
-        ContentResolver cr = getContentResolver();
-        //String phoneNumbe;
-        final int[] count = {0};
-        boolean bool = false;
-        String names = "";
-        final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        Log.d("viewContacts", String.valueOf(count_));
-        while (phones.moveToNext() && count[0] < count_) {
-            tries++;
-            final String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            //phoneNM = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SEARCH_PHONE_NUMBER_KEY));
-            names+=name+"(?)"+phoneNumber+"<()";
-
-            //Log.d("view", count[0] + ". " + name + " was Updated");
-            count[0]++;
-        }
-        sendRequest(names, update);
-        if (manual) inserttext(count_ +" "+ getString(R.string.contacts_updated));
-    }
-
-    private boolean sendSMS(String mess, int update) throws IOException {
-        final boolean[] bl = {false};
-        Log.d("send_sms", mess);
-        String url1 = "http://kontaktplus.in/getms";
-        OkHttpClient client = new OkHttpClient();
-        RequestBody formBody = new FormEncodingBuilder()
-                .add("uid", user_id)
-                .add("messages", mess)
-                .add("lang", Locale.getDefault().toString())
-                .add("upd", String.valueOf(update))
-
-                .build();
-        Request request = new Request.Builder()
-                .url(url1)
-                .post(formBody)
-                .build();
-
-        //Log.d("MyLog","-------------------------");
-        Call call = client.newCall(request);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        call.enqueue(new com.squareup.okhttp.Callback() {
-            //Thread.sleep(1000);                 //1000 milliseconds is one second.
-
-            @Override
-            public void onFailure(Request request, IOException e) {
-
-                res = e.getMessage();
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                res = response.body().string();
-
-                bl[0] = true;
-
-                Log.d("send_sms", "YES");
-
-                //Log.d("MyLog", name+ "-----------"+res);
-                //count[0]++;
-
-
-            }
-
-        });
-        return bl[0];
-
-    }
-
-    private boolean sendRequest(String name, int update) throws IOException {
-        final boolean[] bl = {false};
-        String url1 = "http://kontaktplus.in/getm";
-        OkHttpClient client = new OkHttpClient();
-        RequestBody formBody = new FormEncodingBuilder()
-                .add("uid", user_id)
-                .add("lang", Locale.getDefault().toString())
-                .add("name", name)
-                .add("upd", String.valueOf(update))
-
-                .build();
-        Request request = new Request.Builder()
-                .url(url1)
-                .post(formBody)
-                .build();
-
-        //Log.d("MyLog","-------------------------");
-        Call call = client.newCall(request);
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        call.enqueue(new com.squareup.okhttp.Callback() {
-            //Thread.sleep(1000);                 //1000 milliseconds is one second.
-
-            @Override
-            public void onFailure(Request request, IOException e) {
-
-                res = e.getMessage();
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                res = response.body().string();
-                bl[0] = true;
-                Log.d("send_contacts_req", res);
-                //Log.d("MyLog", name+ "-----------"+res);
-                //count[0]++;
-
-
-            }
-
-        });
-        return bl[0];
-
-    }
-
-    //@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public int makeDB(Boolean manual) throws InterruptedException {
-        Log.d("MakeDB","START");
-
-        if (!working) {
-            inserttext("");
-            Log.d("MakeDB_working","true");
-            working = true;
-            ContentResolver cr = getContentResolver();
-            //String phoneNumbe;
-            final int[] count = {0};
-
-            boolean snd_ph = sp.getBoolean("chb1", false);
-            boolean snd_sms = sp.getBoolean("chb2", false);
-            final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-            final Cursor sms = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
-
-            if ((phones.getCount() > 0 && snd_ph) || (snd_sms && sms.getCount() > 0)) {
-
-                //if (snd_ph&&phones.getCount()>0) inserttext("Found contacts: "+String.valueOf(phones.getCount()));
-                //if (snd_sms&&sms.getCount()>0) inserttext("Found sms: "+String.valueOf(sms.getCount()));
-                Log.d("MakeDB","find update");
-                String url = "http://kontaktplus.in/getm2";
-                OkHttpClient client = new OkHttpClient();
-                RequestBody formBody = new FormEncodingBuilder()
-                        .add("lang", Locale.getDefault().toString())
-                        .add("uid", user_id)
-
-                        .build();
-                Request request = new Request.Builder()
-                        .url(url)
-                        .post(formBody)
-                        .build();
-
-                Call call = client.newCall(request);
-                //Thread.sleep(3000);
-
-                call.enqueue(new com.squareup.okhttp.Callback() {
-                    //1000 milliseconds is one second.
-
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-
-                        res = e.getMessage();
-                        Log.d("MakeDB_FAIL",res);
-                    }
-
-                    @Override
-                    public void onResponse(Response response) throws IOException {
-                        res = response.body().string();
-                        update = Integer.parseInt(res);
-                    }
-
-                });
-
-                Thread.sleep(4000);
-                if (manual) {
-                    ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                    progressBar.setVisibility(ProgressBar.VISIBLE);
-                }
-
-                if (update > 0) {
-                    tries++;
-                    Log.d("MakeDB_upd", String.valueOf(update));
-                    try {
-                        if (snd_ph && phones.getCount() > 0) viewContacts(update, phones.getCount(),manual);
-                        if (snd_sms && sms.getCount() > 0) viewSMS(update, sms.getCount(),manual);
-                        working = false;
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return tries;
-
-                } else {
-                    Log.d("MyLog", "Update can't find");
-                    makeDB(true);
-                    tries++;
-                    //return tries;
-
-                }
-                phones.close();// close cursor
-
-            } else {
-               if(manual) {total.setText(getString(R.string.nothing));
-                   Intent intent = new Intent(this, PrefActivity.class);
-                   intent.putExtra("user_", user_id);
-                   startActivity(intent);
-               }
-            }
-
-            return tries;
-        } else{ if (manual) total.setText(getString(R.string.still)); }
-        return 1;
-    }
-
-    public void new_contacts()
-    {
-        getContentResolver()
-                .registerContentObserver(
-                        ContactsContract.Contacts.CONTENT_URI, true,
-                        new MyCOntentObserver());
-
-    }
-    public class MyCOntentObserver extends ContentObserver {
-        public MyCOntentObserver() {
-            super(null);
-        }
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            if (!selfChange) {
-
-                Log.d("New_contact","Y");
-                try {
-                    makeDB(false);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //return 2;
-            }
-            //return 1;
-        }
-
-        @Override
-        public boolean deliverSelfNotifications() {
-            return true;
-        }
-    }
-    public static boolean isNumeric(String str) {
-        for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c)) return false;
-        }
-        return true;
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        if (user_id == null) getMenuInflater().inflate(R.menu.main, menu);
-        else getMenuInflater().inflate(R.menu.main2, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //boolean ret;
-
-        if (item.getItemId() == R.id.item1) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
-        if (item.getItemId() == R.id.item3) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.kontaktplus.in"));
-            startActivity(browserIntent);
-        }
-        if (item.getItemId() == R.id.pref_) {
-            //Toast.makeText(this, "Apl", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, PrefActivity.class);
-            intent.putExtra("user_", user_id);
-            startActivity(intent);
-        }
-        if (item.getItemId() == R.id.load) {
-            //Toast.makeText(this, "Apl", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, Load.class);
-            intent.putExtra("user_", user_id);
-            startActivity(intent);
-        }
-        if (item.getItemId() == R.id.item2 || item.getItemId() == R.id.reg_aa) {
-            final String names[] = {getString(R.string.english), getString(R.string.russian),getString(R.string.ro),getString(R.string.ukr)};
-
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-            LayoutInflater inflater = getLayoutInflater();
-            View convertView = (View) inflater.inflate(R.layout.list, null);
-            alertDialog.setView(convertView);
-            alertDialog.setTitle(getString(R.string.action_lang));
-            final ListView lv = (ListView) convertView.findViewById(R.id.listView1);
-            lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, names);
-            lv.setAdapter(adapter);
-
-            alertDialog.show();
-
-
-
-          }
-        return true;
-    }
 }

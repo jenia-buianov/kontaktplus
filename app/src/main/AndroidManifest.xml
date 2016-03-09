@@ -28,14 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PrefActivity" >
-        </activity>
-        <activity android:name=".LoginActivity" >
-        </activity>
-        <activity android:name=".RegActivity" >
-        </activity>
-        <activity android:name=".Load" >
-        </activity>
 
         <receiver
             android:name=".MyReceiver"

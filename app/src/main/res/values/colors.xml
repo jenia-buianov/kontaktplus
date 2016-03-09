@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="action_bar">#153A5B</color>
+    <color name="action_color">#FFFFFF</color>
+    <color name="item_selected">#2a4562</color>
+    <color name="button">#459CD5</color>
+    <color name="text_button">#FFF</color>
+    <color name="button_start">#7FB348</color>
+    <color name="button_stop">#CB493C</color>
+</resources>

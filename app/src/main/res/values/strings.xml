@@ -3,97 +3,22 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_lang">Language</string>
-    <string name="action_reg">Registration</string>
-    <string name="action_log">Login</string>
-    <string name="action_exit">Exit</string>
-    <string-array name="entries">
-        <item>one</item>
-        <item>two</item>
-        <item>three</item>
-    </string-array>
-    <string-array name="entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    
-    <string-array name="language">
-        <item>English</item>
-        <item>Russian</item>
-    </string-array>
-    
-    <string name="close" >Close</string>
-    <string name="english" >English</string>
-    <string name="russian" >Русский</string>
-    <string name="ro" >Română</string>
-    <string name="ukr" >Українська</string>
-    <string name="Off_sinh" />
-    <string name="on_sinh" />
-    <string name="email">E-mail</string>
-    <string name="password_valur">Password</string>
-    <string name="number_text">Phone Number</string>
-    <string name="reg_text_button">REGISTRATION</string>
-    <string name="registration_vl">REGISTRATION</string>
-    <string name="save_button_text">SAVE</string>
-    <string name="change_title_text">CHANGE SETTINGS</string>
-    <string name="language_title">AVAILABLE LANGUAGES</string>
-    <string name="english_title">English</string>
-    <string name="russian_titl">Russian</string>
-    <string name="enter_button">SING IN</string>
-    <string name="phone_val">Phone</string>
-    <string name="email_val">E-mail</string>
-    <string name="pass_val">Password</string>
-    <string name="reg_Valll">Register</string>
-    <string name="reg_vall">REGISTRATION</string>
-    <string name="login_button">SING IN</string>
-    <string name="autorize">Authorization</string>
-    <string name="total">PLEASE PRESS BUTTON</string>
-    <string name="uploading">Uploading</string>
-    <string name="title_activity_update">UpdateActivity</string>
-
-    <string name="hello_world">Hello world!</string>
-
-    <string name="item1">Item1</string>
-    <string name="item2">Item2</string>
-    <string name="item3">Item3</string>
-    <string name="item4">Item4</string>
-    <string name="title_activity_notific">NotificActivity</string>
-    <string name="title_activity_load">Load</string>
-    <string name="please_press">Please press the button for start</string>
-    <string name="load_updates">Load updates</string>
-    <string name="warnin_update">Please select your version of update. Remember that all your dates will be deleted and rewrited by the dates from server</string>
-    <string name="autorize_">Authorization</string>
-    <string name="reg_mail">Email</string>
-    <string name="password_">Password</string>
-    <string name="registartion">Registration</string>
-    <string name="wrning_reg">Be careful! Making registration your contacts and sms will be send to the server. This data is confidential</string>
-    <string name="dellcont">Delete Contacts and write from server</string>
-    <string name="update_string">Update</string>
-    <string name="warning_loading">Loading has started. Please do not close the app. You will see the result in the end</string>
-    <string name="agree">Ok, I agree</string>
-    <string name="internet_error">INTERNET ERROR</string>
-    <string name="connection_error">You do not have connection with internet</string>
+    <string name="drawer_opened">Open</string>
+    <string name="drawer_closed">Close</string>
+    <string name="get_saves">Get saves</string>
+    <string name="sync">Synchronize</string>
+    <string name="website">Visit website</string>
+    <string name="login">Sing in</string>
+    <string name="start">START</string>
+    <string name="internet_error">You\'ve got an error</string>
+    <string name="connection_error">The\'re no connection to internet</string>
     <string name="again">TRY AGAIN</string>
-    <string name="contacts_will">Contacts will be send to server</string>
-    <string name="contacts_willnot">Contacts will not be send to the server</string>
-    <string name="sms_will">SMS will be send to server</string>
-    <string name="sms_willnot">SMS will not be send to the server</string>
-    <string name="notlogged">You are not logged yet</string>
-    <string name="sms_updated"> SMS updated</string>
-    <string name="contacts_updated">Contacts updated</string>
-    <string name="nothing">Nothing to upload</string>
-    <string name="finished">FINISHED UPDATE</string>
-    <string name="were_added"> contacts were added\n</string>
-    <string name="sms_were_added"> sms were added</string>
-    <string name="ok">ok</string>
-    <string name="response">RESPONSE FROM SERVER</string>
-    <string name="not_all">You did not introduce all dates</string>
-    <string name="reg_error">REGISTRATION ERROR</string>
-    <string name="atorize_error">AUTHORIZATION ERROR</string>
-    <string name="desc_phone_book">Your phone book will be saved on the server</string>
-    <string name="desc_sms">Your sms will be saved on the server</string>
-    <string name="phone_book">Phone Book</string>
-    <string name="still">Collecting contacts/sms is not finished</string>
-    <string name="adition">Get all saves</string>
+    <string name="loading">Loading\nPlease wait</string>
+    <string name="contacts_will">Contacts will be sent</string>
+    <string name="contacts_willnot">Contacts wouldn\'t be sent</string>
+    <string name="sms_will">SMS will be sent</string>
+    <string name="sms_willnot">SMS wouldn\'t be sent</string>
+    <string name="phones_updated">contacts updated</string>
+    <string name="sms_updated">SMS updated</string>
 
 </resources>

@@ -1,75 +1,37 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="#fff"
-    android:clickable="true">
-
-
-
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView">
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
+    android:id="@+id/main_drawer">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="330dp"
-            android:orientation="vertical"
-            android:background="@mipmap/another_background">
-
-            <ToggleButton
-            android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-            android:text="Sinhronize"
-             android:id="@+id/sinhbutton"
-          android:checked="false"
-         android:background="@mipmap/run"
-         android:textOff="@string/Off_sinh"
-         android:textOn="@string/on_sinh"
-         android:layout_centerVertical="true"
-         android:layout_centerHorizontal="true"
-         android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp" />
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/main_layout">
+            <ProgressBar
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
         </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+<ListView
+    android:layout_width="250dp"
+    android:layout_height="match_parent"
+    android:id="@+id/lv_sliding_menu"
+    android:background="#FFF"
+    android:choiceMode="singleChoice"
+    android:layout_gravity="start">
 
-    <TextView
-        android:id="@+id/tvInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="">
-    </TextView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/total"
-            android:background="#f62e24"
-            android:padding="10dp"
-            android:textColor="#ffffff"
-            android:enabled="false"
-            android:visibility="visible"
-            android:text="@string/please_press"
-            android:layout_marginTop="30dp"
-            android:layout_gravity="center_horizontal" />
-        <TextView
-            android:layout_marginTop="30dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:textColor="#666666"
-            android:id="@+id/upd"
-            android:visibility="visible"
-            android:padding="10dp"
-            android:text="">
-        </TextView>
-
-    </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+</ListView>
+</android.support.v4.widget.DrawerLayout>
 

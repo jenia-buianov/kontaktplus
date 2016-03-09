@@ -172,11 +172,11 @@ public class MakeService extends Service {
 
                         if (rn.equals("y")) {
                             rn = "n";
-                            Intent intents = new Intent(MakeService.this, MainActivity.class);
-                            intents.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intents.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intents.putExtra("text", maintext);
-                            getApplication().startActivity(intents);
+                            //Intent intents = new Intent(MakeService.this, MainActivity.class);
+                            //intents.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            //intents.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            //intents.putExtra("text", maintext);
+                            //getApplication().startActivity(intents);
                         }else{rn = "n";}
 
                     } catch (IOException e) {

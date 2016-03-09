@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="330dp"
+        android:orientation="vertical"
+        android:background="@mipmap/another_background"
+        android:backgroundTint="@mipmap/button_start2"
+        android:backgroundTintMode="src_in"
+        android:clickable="true">
+        <ProgressBar
+            android:id="@+id/pb"
+            android:visibility="gone"
+            android:layout_marginTop="150dp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start"
+            android:id="@+id/start"
+            android:layout_gravity="center"
+            android:layout_marginTop="150dp"
+            android:background="@mipmap/button_start"
+            android:textColor="@color/text_button"
+            android:minWidth="150dp"
+            android:minHeight="50dp"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="false"
+        android:layout_marginTop="400dp"
+        android:minHeight="100dp"
+        android:background="#E5E5E5"
+        android:gravity="center"
+        android:id="@+id/ll"
+        android:visibility="gone">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/container_book"
+    android:textSize="17sp"
+    android:layout_gravity="center" />
+    </LinearLayout>
+</RelativeLayout>
