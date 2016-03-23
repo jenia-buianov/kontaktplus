@@ -2,11 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
+
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is fragment 3"
-        android:textSize="30dp"
-        android:layout_gravity="center"/>
+        android:text="@string/send_contacts"
+        android:id="@+id/snd_cnt"
+        android:layout_margin="10dp" />
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_sms"
+        android:id="@+id/snd_sms"
+        android:layout_margin="10dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notif"
+        android:id="@+id/notific"
+        android:layout_margin="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/save"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@mipmap/button_start3"
+        android:textColor="@color/text_button"
+        android:minWidth="150dp"
+        android:minHeight="50dp"
+        android:layout_centerInParent="true" />
 </LinearLayout>

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.kontaktplus.kontakte.ConnectionDetector;
 import com.kontaktplus.kontakte.R;
@@ -58,6 +60,18 @@ public class Fragment4 extends Fragment {
             if (user_id.length() == 0) user_id = null;
             if (first!="y") first ="n";
         }
+
+        ListView lvMain = (ListView) getActivity().findViewById(R.id.listView);
+        // устанавливаем режим выбора пунктов списка
+        lvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        // Создаем адаптер, используя массив из файла ресурсов
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                getActivity(), R.array.langs,
+                android.R.layout.simple_list_item_1);
+        lvMain.setAdapter(adapter);
+        String[] names;
+        // получаем массив из файла ресурсов
+        names = getResources().getStringArray(R.array.langs);
     }
 
 

@@ -1,15 +1,20 @@
 package com.kontaktplus.kontakte;
 
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -40,6 +45,7 @@ public class MakeService extends Service {
     boolean snd_ph=false, snd_sms=false;
     String phoneNumber,maintext="";
     public String first = "n", rn="";
+    int cont_sms=0,cnt_cont=0;
 
 
 
@@ -53,10 +59,6 @@ public class MakeService extends Service {
     public void onStart(Intent intent, int startid)
         {
 
-            sp = PreferenceManager.getDefaultSharedPreferences(this);
-
-            boolean snd_ph = sp.getBoolean("chb1", false);
-            boolean snd_sms = sp.getBoolean("chb2", false);
 
 
             mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -65,6 +67,10 @@ public class MakeService extends Service {
                 user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
                 first = mSettings.getString(APP_PREFERENCES_COUNTER2, "");
                 rn = mSettings.getString("Run", "");
+                cont_sms = Integer.parseInt(mSettings.getString("CNT_SMS", "0"));
+                cnt_cont = Integer.parseInt(mSettings.getString("CNT_CONT", "0"));
+                snd_ph = mSettings.getBoolean("SND_C", true);
+                snd_sms = mSettings.getBoolean("SND_S", true);
                 if (user_id.length() == 0) user_id = null;
                 if (first!="y") first ="n";
                 //Toast.makeText(MainActivity.this, user_id, Toast.LENGTH_LONG).show();
@@ -100,6 +106,7 @@ public class MakeService extends Service {
 
 
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public int makeDB(Boolean manual, boolean snd_ph, boolean snd_sms) throws InterruptedException {
         Log.d("MakeDB", "START");
 
@@ -114,8 +121,9 @@ public class MakeService extends Service {
 
             final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
             final Cursor sms = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
+            final Cursor sms1 = getContentResolver().query(Uri.parse("content://sms/sent"), null, null, null, null);
 
-            if ((phones.getCount() > 0 && snd_ph) || (snd_sms && sms.getCount() > 0)) {
+            if (((phones.getCount() > 0 && snd_ph) || (snd_sms && sms.getCount() > 0))&&cnt_cont!=phones.getCount()) {
 
                 //if (snd_ph&&phones.getCount()>0) inserttext("Found contacts: "+String.valueOf(phones.getCount()));
                 //if (snd_sms&&sms.getCount()>0) inserttext("Found sms: "+String.valueOf(sms.getCount()));
@@ -166,7 +174,40 @@ public class MakeService extends Service {
 
                         SharedPreferences.Editor editor = mSettings.edit();
                         editor.putString("Run", "n");
+                        editor.putString("CNT_SMS", String.valueOf(sms.getCount()));
+                        editor.putString("CNT_CONT", String.valueOf(phones.getCount()));
 
+                        Context context = getApplicationContext();
+
+                        maintext = phones.getCount()+" "+getString(R.string.phones_updated)+" \n"+(sms.getCount()+sms1.getCount())+" "+getString(R.string.sms_updated);
+
+                        Intent notificationIntent = new Intent(context, MainActivity.class);
+                        notificationIntent.putExtra("text", maintext);
+                        PendingIntent contentIntent = PendingIntent.getActivity(context,
+                                0, notificationIntent,
+                                PendingIntent.FLAG_CANCEL_CURRENT);
+
+                        Resources res1 = context.getResources();
+                        //finalK + getString(R.string.were_added) + finalM + getString(R.string.sms_were_added),getString(R.string.finished),getString(R.string.ok)
+                        Notification.Builder builder = new Notification.Builder(context);
+                        builder.setContentIntent(contentIntent)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                        // большая картинка
+                                .setTicker(getString(R.string.updated_string))
+                                .setWhen(System.currentTimeMillis())
+                                .setAutoCancel(true)
+                                        //.setContentTitle(res.getString(R.string.notifytitle)) // Заголовок уведомления
+                                .setContentTitle(getString(R.string.finished))
+                                        //.setContentText(res.getString(R.string.notifytext))
+                                .setContentText(maintext); // Текст уведомления
+
+                        // Notification notification = builder.getNotification(); // до API 16
+                        Notification notification = builder.build();
+                        long[] vibrate = new long[] { 1000, 1000, 1000, 1000, 1000 };
+                        notification.vibrate = vibrate;
+                        NotificationManager notificationManager = (NotificationManager) context
+                                .getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.notify(1, notification);
                         //editor.apply();
                         editor.apply();
 
@@ -187,7 +228,7 @@ public class MakeService extends Service {
 
                 } else {
                     Log.d("MyLog", "Update can't find");
-                    makeDB(true, snd_ph,snd_sms);
+                    makeDB(true, snd_ph, snd_sms);
                     tries++;
                     //return tries;
 
@@ -210,7 +251,11 @@ public class MakeService extends Service {
         if (cursor.moveToFirst()) { // must check the result to prevent exception
             String date_ = "";
             do {
-                date_ += cursor.getString(cursor.getColumnIndexOrThrow("address")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("read")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("date")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("body")).toString() + "(||)-(||)<?)";
+                String date_1 =  cursor.getString(cursor.getColumnIndex("date"));
+
+                String smsDate = date_1;
+
+                date_ += cursor.getString(cursor.getColumnIndexOrThrow("address")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("read")).toString() + "(||)" + smsDate + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("body")).toString() + "(||)-(||)<?)";
 
                 // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (cursor.moveToNext());
@@ -218,14 +263,14 @@ public class MakeService extends Service {
             date2_ = date_;
         }
 
-        Uri sentURI = Uri.parse("content://sms/sent");
-        String[] reqCols = new String[]{"date_sent", "address", "body", "read"};
-        ContentResolver cr = getContentResolver();
-        Cursor c = cr.query(sentURI, reqCols, null, null, null);
+        Cursor c = getContentResolver().query(Uri.parse("content://sms/sent"), null, null, null, null);
+
         if (c.moveToFirst()) { // must check the result to prevent exception
             String date_2 = "";
             do {
-                date_2 += c.getString(c.getColumnIndexOrThrow("address")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("read")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("date_sent")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("body")).toString() + "(||)me(||)<?)";
+                String date_11 =  c.getString(c.getColumnIndex("date"));
+                String smsDate = date_11;
+                date_2 += c.getString(c.getColumnIndexOrThrow("address")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("read")).toString() + "(||)" + smsDate + "(||)" + c.getString(c.getColumnIndexOrThrow("body")).toString() + "(||)me(||)<?)";
                 //inserttext(c.getString(cursor.getColumnIndexOrThrow("address")).toString());
                 // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (c.moveToNext());
@@ -257,7 +302,7 @@ public class MakeService extends Service {
             count[0]++;
         }
         sendRequest(names, update);
-        if (manual) maintext+="\n"+count_ +" "+ getString(R.string.contacts_updated);
+        if (manual) maintext+="\n"+count_ +" "+ getString(R.string.phones_updated);
     }
 
     private boolean sendSMS(String mess, int update) throws IOException {

@@ -37,16 +37,17 @@ import java.util.Locale;
  * Created by User on 06.03.2016.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class Fragment5 extends Fragment {
+public class Fragment6 extends Fragment {
 
     SharedPreferences sp;
     String user_id = null;
-    public static final String APP_PREFERENCES_COUNTER = "user_id";
     public static final String APP_PREFERENCES = "myusers";
-    String res=null;
+    public static final String APP_PREFERENCES_COUNTER = "user_id";
+    public static final String APP_PREFERENCES_COUNTER2 = "first_visit";
+    String res = null;
+    String pass_val, phone_val, email_val;
 
-    public String password_,email_,number_;
-    public SharedPreferences mSettings;
+    private SharedPreferences mSettings;
 
     // Connection to Internet /
     Boolean isInternetPresent = false;
@@ -59,70 +60,53 @@ public class Fragment5 extends Fragment {
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment5, container, false);
+        View rootView = inflater.inflate(R.layout.fragment6, container, false);
         return rootView;
     }
 
 
     public void onStart() {
         super.onStart();
-        Button regButton = (Button) getActivity().findViewById(R.id.reg_button);
-        Button singButton = (Button) getActivity().findViewById(R.id.save_button);
+
+        mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
+        Button regButton1 = (Button) getActivity().findViewById(R.id.reg_button1);
+        final EditText phone = (EditText) getActivity().findViewById(R.id.phone);
         final EditText mail = (EditText) getActivity().findViewById(R.id.mail);
         final EditText pass = (EditText) getActivity().findViewById(R.id.password);
 
-        regButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                replaceFragment(3);
-            }
-        });
-
-        singButton.setOnClickListener(new View.OnClickListener() {
+        regButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 cd = new ConnectionDetector(getActivity().getApplicationContext());
+            String m = mail.getText().toString();
+            String pp = pass.getText().toString();
+            String number = phone.getText().toString();
 
-                String m = mail.getText().toString();
-                String pp = pass.getText().toString();
+            if(m.length()>4&&pp.length()>5&&!pp.equalsIgnoreCase("Password")&&!m.equalsIgnoreCase("E-mail")&&number.length()>9)
+            {
+                pass_val = pp;
+                phone_val = number;
+                email_val = m;
+                isInternetPresent = cd.ConnectingToInternet();
 
-                if (m.length() > 4 && pp.length() > 5 && !pp.equalsIgnoreCase("Password") && !m.equalsIgnoreCase("E-mail")) {
-                    isInternetPresent = cd.ConnectingToInternet();
+                //Проверяем Интернет статус:
+                if (isInternetPresent) {
+                    //Интернет соединение есть
+                    //делаем HTTP запросы:
 
-                    password_ = pp;
-                    email_ = m;
-                    //Проверяем Интернет статус:
-                    if (isInternetPresent) {
-                        //Интернет соединение есть
-                        //делаем HTTP запросы:
-
-                        try {sendRequest();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(getString(R.string.internet_error))
-                                .setMessage(getString(R.string.connection_error))
-                                .setCancelable(false)
-                                .setNegativeButton(getString(R.string.again),
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        });
-                        AlertDialog alert = builder.create();
-                        alert.show();
+                    try {
+                        sendRequest();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
 
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(getString(R.string.atorize_error))
-                            .setMessage(getString(R.string.not_all))
+                    builder.setTitle(getString(R.string.internet_error))
+                            .setMessage(getString(R.string.connection_error))
                             .setCancelable(false)
                             .setNegativeButton(getString(R.string.again),
                                     new DialogInterface.OnClickListener() {
@@ -132,13 +116,33 @@ public class Fragment5 extends Fragment {
                                     });
                     AlertDialog alert = builder.create();
                     alert.show();
-
                 }
 
-            }
-        });
 
-    }
+            }
+
+            else
+
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(getString(R.string.atorize_error))
+                        .setMessage(getString(R.string.not_all))
+                        .setCancelable(false)
+                        .setNegativeButton(getString(R.string.again),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
+            }
+
+        }
+    });
+
+}
 
     private void sendRequest() throws IOException {
 
@@ -150,11 +154,14 @@ public class Fragment5 extends Fragment {
 
 
 // запускаем длительную операцию
-        String url = "http://kontaktplus.in/ent";
+        String url = "http://kontaktplus.in/reg";
+        //Toast.makeText(RegActivity.this, "run", Toast.LENGTH_LONG).show();
+        //  Log.d(LOGTAG, "url");
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormEncodingBuilder()
-                .add("pass", password_)
-                .add("email", email_)
+                .add("phone", phone_val)
+                .add("pass", pass_val)
+                .add("email", email_val)
                 .add("lang", Locale.getDefault().toString())
 
 
@@ -177,49 +184,40 @@ public class Fragment5 extends Fragment {
             public void onResponse(Response response) throws IOException {
                 res = response.body().string();
                 res = res.toString();
-                String[] es = res.split("/");
-                Log.d("MyLogin", res);
-                if (es.length > 1) {
-                    res = es[0];
-                    //group = es[1];
-                    Log.d("MyLogin", res);
-                    //Log.d("MyLogin", group);
-                }
 
-                        if (res.length() == 0 || !isNumeric(res)) {
-                            Log.d("Error ", res);
-                            getActivity().runOnUiThread(new Runnable() {
-                                public void run() {
+                if (res.length() == 0 || !isNumeric(res)) {
+                    Log.d("Error ", res);
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                    builder.setTitle(getString(R.string.response))
-                                            .setMessage(res)
-                                            .setCancelable(false)
-                                            .setNegativeButton(getString(R.string.again),
-                                                    new DialogInterface.OnClickListener() {
-                                                        public void onClick(DialogInterface dialog, int id) {
-                                                            dialog.cancel();
-                                                        }
-                                                    });
-                                    AlertDialog alert = builder.create();
-                                    alert.show();
-                                }
-                            });
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle(getString(R.string.response))
+                                    .setMessage(res)
+                                    .setCancelable(false)
+                                    .setNegativeButton(getString(R.string.again),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+                                                }
+                                            });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+                    });
 
 
-                        } else {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                 //Toast.makeText(getActivity(), "TEXT: " + res, Toast.LENGTH_SHORT).show();
-                                 sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                    mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                } else {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(getActivity(), "TEXT: " + res, Toast.LENGTH_SHORT).show();
+                            sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-                                    SharedPreferences.Editor editor = mSettings.edit();
+                            SharedPreferences.Editor editor = mSettings.edit();
                             editor.putString(APP_PREFERENCES_COUNTER, res);
                             editor.putBoolean("SND_C", true);
                             editor.putBoolean("SND_S", true);
-
                             //editor.apply();
                             editor.apply();
 
@@ -227,6 +225,7 @@ public class Fragment5 extends Fragment {
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("user_", res);
+
                             //intent.putExtra("first_visit", true);
 
 

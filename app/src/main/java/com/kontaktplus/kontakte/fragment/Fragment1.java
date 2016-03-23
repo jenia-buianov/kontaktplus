@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +33,7 @@ import com.kontaktplus.kontakte.R;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class Fragment1 extends Fragment {
-    public Fragment1()
-    {
 
-    }
     public SharedPreferences sp;
     String user_id = null;
     public boolean working = false;
@@ -47,6 +43,7 @@ public class Fragment1 extends Fragment {
     public static final String APP_PREFERENCES_COUNTER2 = "first_visit";
     public boolean snd_sms = false;
     public boolean snd_ph = false;
+    public String TextFromIntents = "";
     CatTask cattask;
 
     private SharedPreferences mSettings;
@@ -75,12 +72,13 @@ public class Fragment1 extends Fragment {
         if (mSettings.contains(APP_PREFERENCES_COUNTER)) {
             user_id = mSettings.getString(APP_PREFERENCES_COUNTER, "");
             first = mSettings.getString(APP_PREFERENCES_COUNTER2, "");
+            TextFromIntents = mSettings.getString("text", "");
             if (user_id.length() == 0) user_id = null;
             if (first!="y") first ="n";
+            snd_ph = mSettings.getBoolean("SND_C", true);
+            snd_sms = mSettings.getBoolean("SND_S", true);
         }
-        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        snd_ph = sp.getBoolean("chb1", false);
-        snd_sms = sp.getBoolean("chb2", false);
+
 
         String text = null;
         if (snd_ph) text = getString(R.string.contacts_will);
@@ -88,7 +86,11 @@ public class Fragment1 extends Fragment {
         if (snd_sms) text += "\n" + getString(R.string.sms_will);
         else text += "\n" + getString(R.string.sms_willnot);
         TextView cont = (TextView)getView().findViewById(R.id.container_book);
-        cont.setText(text);
+        if(TextFromIntents.length()>0) {
+            cont.setVisibility(View.VISIBLE);
+            cont.setText(TextFromIntents);
+        }
+            else cont.setText(text);
 
 
         if (mSettings.getString("Run", "")=="y"){
@@ -113,9 +115,13 @@ public class Fragment1 extends Fragment {
                         cd = new ConnectionDetector(getActivity().getApplicationContext());
                         isInternetPresent = cd.ConnectingToInternet();
                         if (isInternetPresent) {
-                            working = true;
-                            cattask = new CatTask();
-                            cattask.execute();
+                            if(!snd_ph&&!snd_sms){
+                             replaceFragment(2);
+                            }else {
+                                working = true;
+                                cattask = new CatTask();
+                                cattask.execute();
+                            }
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setTitle(getString(R.string.internet_error))
@@ -232,8 +238,8 @@ public class Fragment1 extends Fragment {
             editor.commit();
 
             Intent intents = new Intent(getActivity(), MakeService.class);
-            intents.putExtra("snd_sms", sp.getBoolean("chb2", false));
-            intents.putExtra("snd_ph", sp.getBoolean("chb1", false));
+            intents.putExtra("snd_sms", mSettings.getBoolean("SND_S", false));
+            intents.putExtra("snd_ph", mSettings.getBoolean("SND_C", false));
 
             getActivity().startService(intents);
             return null;
@@ -252,14 +258,12 @@ public class Fragment1 extends Fragment {
             ContentResolver cr = getActivity().getContentResolver();
             final Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
             final Cursor sms = getActivity().getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
-            Uri sentURI = Uri.parse("content://sms/sent");
+            final Cursor sms2 = getActivity().getContentResolver().query(Uri.parse("content://sms/sent"), null, null, null, null);
 
 
-            ContentResolver cr1 = getActivity().getContentResolver();
-            Cursor c = cr1.query(sentURI, null, null, null, null);
             int count_phones = phones.getCount();
-            int count_sms = sms.getCount()+c.getCount();
-            cont.setText(count_phones +" "+ getString(R.string.phones_updated)+"\n"+getString(R.string.sms_updated)+" "+ count_sms);
+            int count_sms = sms.getCount()+sms2.getCount();
+            cont.setText(count_phones +" "+ getString(R.string.phones_updated)+"\n"+count_sms+" "+getString(R.string.sms_updated));
 
         }
     }

@@ -3,86 +3,52 @@
 
     <string name="action_settings">Настройки</string>
     <string name="action_lang">Язык</string>
-    <string name="action_reg">Регистрация</string>
-    <string name="action_log">Вход</string>
-    <string name="action_exit">Выход</string>
-    
-
-    <string name="close" >Закрыть</string>
-    <string name="Off_sinh" />
-    <string name="on_sinh" />
-    <string name="email">E-mail</string>
-    <string name="password_valur">Пароль</string>
-    <string name="number_text">Номер телефона</string>
-    <string name="reg_text_button">РЕГИСТРАЦИЯ</string>
-    <string name="registration_vl">РЕГИСТРАЦИЯ</string>
-    <string name="save_button_text">СОХРАНИТЬ</string>
-    <string name="change_title_text">ИЗМЕНИТЬ НАСТРОЙКИ</string>
-    <string name="language_title">ДОСТУПНЫЕ ЯЗЫКИ</string>
-    <string name="english_title">English</string>
-    <string name="russian_titl">Русский</string>
-    <string name="enter_button">Вход</string>
-    <string name="phone_val">Телефон</string>
-    <string name="email_val">E-mail</string>
-    <string name="pass_val">Пароль</string>
-    <string name="reg_Valll">Регистрация</string>
-    <string name="reg_vall">РЕГИСТРАЦИЯ</string>
-    <string name="login_button">ВХОД</string>
-    <string name="autorize">Авторизация</string>
-    <string name="total">Пожалуйста нажмите на кнопку</string>
-    <string name="uploading">Загрузка</string>
-    <string name="title_activity_update">UpdateActivity</string>
-
-    <string name="hello_world">Hello world!</string>
-
-    <string name="item1">Item1</string>
-    <string name="item2">Item2</string>
-    <string name="item3">Item3</string>
-    <string name="item4">Item4</string>
-    <string name="title_activity_notific">NotificActivity</string>
-    <string name="title_activity_load">Загрузка</string>
-    <string name="please_press">Пожалуйста нажмите на кнопу для старта</string>
-    <string name="load_updates">Загрузить сохранения</string>
-    <string name="warnin_update">Пожалуйста выберите версию сохранения. Помните что все данные могут быть заменнены данными с сервера</string>
-    <string name="autorize_">Авторизация</string>
-    <string name="reg_mail">Email</string>
-    <string name="password_">Пароль</string>
-    <string name="registartion">Регистрация</string>
-    <string name="wrning_reg">Внимание! Регистрируясь вы принимаете соглашение о хранение данных на нашем сервере. Информация абсолютно конфиденциальна</string>
-    <string name="dellcont">Удалить данные и загрузить с сервера</string>
-    <string name="update_string">Обновление</string>
-    <string name="warning_loading">Загрузка началась. Пожалуйста не закрывайте приложение!</string>
-    <string name="agree">Я согласен</string>
-    <string name="internet_error">Ошибка соединения</string>
+    <string name="drawer_opened">Открыть</string>
+    <string name="drawer_closed">Закрыть</string>
+    <string name="get_saves">Сохранения</string>
+    <string name="sync">Синхронизация</string>
+    <string name="website">Посетить сайт</string>
+    <string name="login">Авторизация</string>
+    <string name="start">Старт</string>
+    <string name="internet_error">Внимание! Ошибка</string>
     <string name="connection_error">Проверьте подключение к интернету</string>
-    <string name="again">ПОПРОБОВАТЬ СНОВА</string>
-    <string name="contacts_will">Контакты будут отправлены на сервер</string>
-    <string name="contacts_willnot">Контакты не будут отправлены на сервер</string>
-    <string name="sms_will">СМС будут отправлены на сервер</string>
-    <string name="sms_willnot">СМС не будут отправлены на сервер</string>
-    <string name="notlogged">Вы еще не авторизированы</string>
-    <string name="sms_updated"> СМС сохранено</string>
-    <string name="contacts_updated"> контактов сохранено</string>
-    <string name="nothing">Ничего не выброано</string>
-    <string name="finished">ЗАГРУЗКА ЗАВЕРШЕНА</string>
-    <string name="were_added"> контактов добаленно\n</string>
-    <string name="sms_were_added"> смс добавленно</string>
+    <string name="again">Попробовать снова</string>
+    <string name="loading">Загрузка\nПожалуйста подождите</string>
+    <string name="contacts_will">Контакты будут отправленны</string>
+    <string name="contacts_willnot">Контакты не будут отправленны</string>
+    <string name="sms_will">СМС будут отправленны</string>
+    <string name="sms_willnot">СМС не будут отправленны</string>
+    <string name="phones_updated">контактов добавленно</string>
+    <string name="sms_updated">сообщений добавленно</string>
+    <string name="dellcont">Перезаписать контакты и смс</string>
+    <string name="updated_string">Kontakt Plus загружает данные</string>
+    <string name="updated_string2">Kontakt Plus загружает данные</string>
+    <string name="send_contacts">Записная книга</string>
+    <string name="send_sms">СМС</string>
+    <string name="notif">Уведомления</string>
+    <string name="save">СОХРАНИТЬ</string>
+    <string name="phone">Телефонный номер</string>
+    <string name="mail">E-mail</string>
+    <string name="password">Пароль</string>
+    <string name="registration">Регистрация</string>
     <string name="ok">ok</string>
-    <string name="response">ОТВЕТ СЕРВЕРА</string>
+    <string name="response">Ответ</string>
     <string name="not_all">Вы не заполнили все данные</string>
-    <string name="reg_error">ОШИБКА РГИСТРАЦИИ</string>
-    <string name="atorize_error">ОШИБКА АВТОРИЗАЦИИ</string>
-    <string name="desc_phone_book">Ваша записная книга будет сохраненна на сервере</string>
-    <string name="desc_sms">Ваши сообщения будут сохраненны на сервере</string>
-    <string name="phone_book">Записная книга</string>
-    <string name="english" >English</string>
-    <string name="russian" >Русский</string>
-    <string name="ro" >Română</string>
-    <string name="ukr" >Українська</string>
-    <string name="still" >Сбор контактов/сообщений ещё не завершен</string>
-    <string name="adition">Все сохранения</string>
+    <string name="atorize_error">Ошибка!</string>
+    <string name="finished">Загрузка завершенна</string>
+    <string name="email">E-mail</string>
+    <string name="warning_loading">Внимание ошибка!</string>
+    <string name="update_string">Началась загрузка</string>
+    <string name="were_added">добавленно контактов</string>
+    <string name="sms_were_added">смс добавленно</string>
 
 
 
 
+    <string-array name="langs">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Română</item>
+        <item>Український</item>
+    </string-array>
 </resources>

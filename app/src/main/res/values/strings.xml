@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">KONTAKT PLUS</string>
 
     <string name="action_settings">Settings</string>
@@ -20,5 +20,33 @@
     <string name="sms_willnot">SMS wouldn\'t be sent</string>
     <string name="phones_updated">contacts updated</string>
     <string name="sms_updated">SMS updated</string>
+    <string name="dellcont">Rewrite all contacts and SMS</string>
+    <string name="updated_string">Kontakt Plus uploading dates</string>
+    <string name="updated_string2">Kontakt Plus updating dates</string>
+    <string name="send_contacts">Send phonebook</string>
+    <string name="send_sms">Send SMS</string>
+    <string name="notif">Notifications</string>
+    <string name="save">SAVE</string>
+    <string name="phone">Phone number</string>
+    <string name="mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="registration">Registration</string>
+    <string name="ok">ok</string>
+    <string name="response">Response</string>
+    <string name="not_all">You didn\'t introduce all dates</string>
+    <string name="atorize_error">Athorization error</string>
+    <string name="finished">Uploading is finished</string>
+    <string name="email">E-mail</string>
+    <string name="warning_loading">Warning Error!</string>
+    <string name="update_string">Updating has started</string>
+    <string name="were_added">contacts were added</string>
+    <string name="sms_were_added">sms were added</string>
 
+    
+    <string-array name="langs">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Română</item>
+        <item>Український</item>
+    </string-array>
 </resources>
