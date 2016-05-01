@@ -1,0 +1,57 @@
+﻿<resources>
+    <string name="app_name">KONTAKT PLUS</string>
+
+    <string name="action_settings">Настрйкі</string>
+    <string name="action_lang">Мова</string>
+    <string name="drawer_opened">Відкрити</string>
+    <string name="drawer_closed">Закрити</string>
+    <string name="get_saves">Збереження</string>
+    <string name="sync">Синхронізіція</string>
+    <string name="website">Відвідати сайт</string>
+    <string name="login">Авторизація</string>
+    <string name="start">Старт</string>
+    <string name="internet_error">Увага! Помилка</string>
+    <string name="connection_error">Перевірте підключення до інтернету</string>
+    <string name="again">Спробуйте знову</string>
+    <string name="loading">Завантаження\nБудь ласка зачеайте</string>
+    <string name="contacts_will">Контакти будуть відправлені</string>
+    <string name="contacts_willnot">Контакти не будуть відправлені</string>
+    <string name="sms_will">СМС будуть відправлені</string>
+    <string name="sms_willnot">СМС не будуть відправлені</string>
+    <string name="phones_updated">Контактів додано</string>
+    <string name="sms_updated">Повідомлень додано</string>
+    <string name="dellcont">Перезаписати контакти і смс</string>
+    <string name="updated_string">Kontakt Plus завантажує дані</string>
+    <string name="updated_string2">Kontakt Plus завантажує дані</string>
+    <string name="send_contacts">записна книга</string>
+    <string name="send_sms">СМС</string>
+    <string name="notif">Повідомлення</string>
+    <string name="save">Зберегти</string>
+    <string name="phone">номер телефону</string>
+    <string name="mail">E-mail</string>
+    <string name="password">Пароль</string>
+    <string name="registration">Реєстрація</string>
+    <string name="ok">ОК</string>
+    <string name="response">Відповідь</string>
+    <string name="not_all">Ви не заповнили всі дані</string>
+    <string name="atorize_error">Помилка!</string>
+    <string name="finished">Завантаження завершене</string>
+    <string name="email">E-mail</string>
+    <string name="warning_loading">Увага помилка!</string>
+    <string name="update_string">Завантаження почалася</string>
+    <string name="were_added">додано контактів</string>
+    <string name="sms_were_added">додано смс</string>
+
+
+
+
+    <string-array name="langs">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Română</item>
+        <item>Український</item>
+        <item>日本語</item>
+        <item>Dutch</item>
+        <item>Spansh</item>
+    </string-array>
+</resources>

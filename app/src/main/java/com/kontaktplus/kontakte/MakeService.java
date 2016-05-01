@@ -26,6 +26,8 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -242,6 +244,14 @@ public class MakeService extends Service {
         return 1;
     }
 
+    public static String millisToDate(long currentTime) {
+        String finalDate;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(currentTime);
+        Date date = calendar.getTime();
+        finalDate = date.toString();
+        return finalDate;
+    }
     public void viewSMS(int update, int count_, Boolean manual) throws IOException {
         Log.d("viewSMS", "STARTED");
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
@@ -251,12 +261,13 @@ public class MakeService extends Service {
         if (cursor.moveToFirst()) { // must check the result to prevent exception
             String date_ = "";
             do {
-                String date_1 =  cursor.getString(cursor.getColumnIndex("date"));
+                String date = millisToDate(cursor.getLong(cursor.getColumnIndex("date")));
+                //String date_1 = new SimpleDateFormat("MM-dd-yyyy").format(date);
 
-                String smsDate = date_1;
+                String smsDate = date;
 
                 date_ += cursor.getString(cursor.getColumnIndexOrThrow("address")).toString() + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("read")).toString() + "(||)" + smsDate + "(||)" + cursor.getString(cursor.getColumnIndexOrThrow("body")).toString() + "(||)-(||)<?)";
-
+                //Toast.makeText(getApplicationContext(),date_,Toast.LENGTH_SHORT);
                 // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (cursor.moveToNext());
             //inserttext(count_+" SMS inbox updated";
@@ -271,6 +282,7 @@ public class MakeService extends Service {
                 String date_11 =  c.getString(c.getColumnIndex("date"));
                 String smsDate = date_11;
                 date_2 += c.getString(c.getColumnIndexOrThrow("address")).toString() + "(||)" + c.getString(c.getColumnIndexOrThrow("read")).toString() + "(||)" + smsDate + "(||)" + c.getString(c.getColumnIndexOrThrow("body")).toString() + "(||)me(||)<?)";
+                //Toast.makeText(getApplicationContext(),date_2,Toast.LENGTH_SHORT);
                 //inserttext(c.getString(cursor.getColumnIndexOrThrow("address")).toString());
                 // inserttext(cursor.getString(cursor.getColumnIndexOrThrow("body")).toString());
             } while (c.moveToNext());

@@ -406,7 +406,7 @@ public class Fragment2 extends Fragment {
                         get_saves.setVisibility(View.VISIBLE);
 
                         Context context = getActivity().getApplicationContext();
-                        maintext = finalK + getString(R.string.were_added) + finalM + getString(R.string.sms_were_added);
+                        maintext = finalK+" "+getString(R.string.were_added)+" "+finalM+" "+getString(R.string.sms_were_added);
 
                         Intent notificationIntent = new Intent(context, MainActivity.class);
                         notificationIntent.putExtra("text", maintext);

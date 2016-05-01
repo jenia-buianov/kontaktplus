@@ -1,0 +1,57 @@
+﻿<resources>
+    <string name="app_name">KONTAKT PLUS</string>
+
+    <string name="action_settings">Setari</string>
+    <string name="action_lang">Limba</string>
+    <string name="drawer_opened">Descide</string>
+    <string name="drawer_closed">Incide</string>
+    <string name="get_saves">Salvare</string>
+    <string name="sync">Синхронизация</string>
+    <string name="website">Vizitarea siteuri</string>
+    <string name="login">Autorizarea</string>
+    <string name="start">Start</string>
+    <string name="internet_error">Atentie! Gresala</string>
+    <string name="connection_error">Repetati conectarea la internet</string>
+    <string name="again">Incercati din nou</string>
+    <string name="loading">Incarcare\nVa rog asteptati</string>
+    <string name="contacts_will">Contactele vor fi expediate</string>
+    <string name="contacts_willnot">Contactele nu vor fi expediate</string>
+    <string name="sms_will">SMS vor fi expediate</string>
+    <string name="sms_willnot">SMS nu vor fi expediate</string>
+    <string name="phones_updated">adăugați contacte</string>
+    <string name="sms_updated">mesajele adăugate</string>
+    <string name="dellcont">Transcrie contacte si SMS</string>
+    <string name="updated_string">Kontakt Plus incarca datele</string>
+    <string name="updated_string2">Kontakt Plus incarca datele</string>
+    <string name="send_contacts">Записная книга</string>
+    <string name="send_sms">SMS</string>
+    <string name="notif">Уведомления</string>
+    <string name="save">СОХРАНИТЬ</string>
+    <string name="phone">Телефонный номер</string>
+    <string name="mail">E-mail</string>
+    <string name="password">Пароль</string>
+    <string name="registration">Регистрация</string>
+    <string name="ok">ok</string>
+    <string name="response">Ответ</string>
+    <string name="not_all">Вы не заполнили все данные</string>
+    <string name="atorize_error">Ошибка!</string>
+    <string name="finished">Загрузка завершенна</string>
+    <string name="email">E-mail</string>
+    <string name="warning_loading">Atentie gresala!</string>
+    <string name="update_string">Началась загрузка</string>
+    <string name="were_added">добавленно контактов</string>
+    <string name="sms_were_added">смс добавленно</string>
+
+
+
+
+    <string-array name="langs">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Română</item>
+        <item>Український</item>
+        <item>日本語</item>
+        <item>Dutch</item>
+        <item>Espaniol</item>
+    </string-array>
+</resources>

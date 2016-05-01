@@ -1,0 +1,57 @@
+﻿<resources>
+    <string name="app_name">KONTAKT PLUS</string>
+
+    <string name="action_settings">Instellingen</string>
+    <string name="action_lang">Taal</string>
+    <string name="drawer_opened">Openen</string>
+    <string name="drawer_closed">Sluiten</string>
+    <string name="get_saves">Besparingen</string>
+    <string name="sync">Synchronisatie</string>
+    <string name="website">Controle uit een website</string>
+    <string name="login">Vergunning</string>
+    <string name="start">Begin</string>
+    <string name="internet_error">Waarschuwing! Fout</string>
+    <string name="connection_error">Controleverbinding aan Internet</string>
+    <string name="again">Probeer opnieuw</string>
+    <string name="loading">Lading\nGelieve te wachten</string>
+    <string name="contacts_will">De contacten zullen worden verzonden</string>
+    <string name="contacts_willnot">De contacten zullen niet verzonden worden</string>
+    <string name="sms_will">SMS zal worden verzonden</string>
+    <string name="sms_willnot">SMS zal niet verzonden worden</string>
+    <string name="phones_updated">de contacten werden toegevoegd</string>
+    <string name="sms_updated">de berichten werden toegevoegd</string>
+    <string name="dellcont">Herschrijf contacten en berichten</string>
+    <string name="updated_string">Kontakt Plus ladingsgegevens</string>
+    <string name="updated_string2">Kontakt Plus ladingsgegevens</string>
+    <string name="send_contacts">Regular book</string>
+    <string name="send_sms">SMS</string>
+    <string name="notif">Berichten</string>
+    <string name="save">OPSLAAN</string>
+    <string name="phone">telefoonaantal</string>
+    <string name="mail">E-mail</string>
+    <string name="password">Wachtwoord</string>
+    <string name="registration">Registratie</string>
+    <string name="ok">o.k.</string>
+    <string name="response">Antwoord</string>
+    <string name="not_all">U vulde alle gegevens niet</string>
+    <string name="atorize_error">Fout!</string>
+    <string name="finished">Voltooide lading</string>
+    <string name="email">E-mail</string>
+    <string name="warning_loading">Aandachtsfout!</string>
+    <string name="update_string">De lading begon</string>
+    <string name="were_added">de contacten werden toegevoegd</string>
+    <string name="sms_were_added">sms werden toegevoegd</string>
+
+
+
+
+    <string-array name="langs">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Română</item>
+        <item>Український</item>
+        <item>日本語</item>
+        <item>Dutch</item>
+        <item>Spansh</item>
+    </string-array>
+</resources>

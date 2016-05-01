@@ -1,0 +1,57 @@
+﻿<resources>
+    <string name="app_name">KONTAKT PLUS</string>
+
+    <string name="action_settings">Configuración</string>
+    <string name="action_lang">Idioma</string>
+    <string name="drawer_opened">Abierto</string>
+    <string name="drawer_closed">Cerrar</string>
+    <string name="get_saves">Ahorros</string>
+    <string name="sync">Sincronización</string>
+    <string name="website">Compruebe hacia fuera un sitio web</string>
+    <string name="login">Autorización</string>
+    <string name="start">Comienzo</string>
+    <string name="internet_error">¡Advertencia! Error</string>
+    <string name="connection_error">Compruebe la conexión a Internet</string>
+    <string name="again">Intento otra vez</string>
+    <string name="loading">Carga\nEspere por favor</string>
+    <string name="contacts_will">Los contactos serán enviados</string>
+    <string name="contacts_willnot">Los contactos no serán enviados</string>
+    <string name="sms_will">SMS será enviado</string>
+    <string name="sms_willnot">SMS no será enviado</string>
+    <string name="phones_updated">los contactos fueron añadidos</string>
+    <string name="sms_updated">los mensajes fueron añadidos</string>
+    <string name="dellcont">Contactos y mensajes de la reescritura</string>
+    <string name="updated_string">Datos del cargamento de Kontakt Plus</string>
+    <string name="updated_string2">Datos del cargamento de Kontakt Plus</string>
+    <string name="send_contacts">Libreta</string>
+    <string name="send_sms">SMS</string>
+    <string name="notif">Notificaciones</string>
+    <string name="save">GUARDAR</string>
+    <string name="phone">número de teléfono</string>
+    <string name="mail">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="registration">Registro</string>
+    <string name="ok">autorización</string>
+    <string name="response">Respuesta</string>
+    <string name="not_all">Usted no llenó todos los datos</string>
+    <string name="atorize_error">Error!</string>
+    <string name="finished">Cargamento terminado</string>
+    <string name="email">Email</string>
+    <string name="warning_loading">Error de la atención!</string>
+    <string name="update_string">El cargamento comenzó</string>
+    <string name="were_added">los contactos fueron añadidos</string>
+    <string name="sms_were_added">el SMS fue añadido</string>
+
+
+
+
+    <string-array name="langs">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Română</item>
+        <item>Український</item>
+		<item>日本語</item>
+		<item>Dutch</item>
+		<item>Spansh</item>
+    </string-array>
+</resources>

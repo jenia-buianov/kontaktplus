@@ -1,0 +1,57 @@
+﻿<resources>
+    <string name="app_name">KONTAKT PLUS</string>
+
+    <string name="action_settings">設定</string>
+    <string name="action_lang">言語</string>
+    <string name="drawer_opened">開いた</string>
+    <string name="drawer_closed">終わり</string>
+    <string name="get_saves">節約</string>
+    <string name="sync">同時性</string>
+    <string name="website">ウェブサイトを点検しなさい</string>
+    <string name="login">承認</string>
+    <string name="start">開始</string>
+    <string name="internet_error">警告! 間違い</string>
+    <string name="connection_error">インターネットへの点検の関係</string>
+    <string name="again">もう一度試</string>
+    <string name="loading">負荷\n待ちなさい</string>
+    <string name="contacts_will">接触は送られる</string>
+    <string name="contacts_willnot">接触は送られない</string>
+    <string name="sms_will">SMSは送られる</string>
+    <string name="sms_willnot">SMSは送られない</string>
+    <string name="phones_updated">接触は加えられた</string>
+    <string name="sms_updated">メッセージは加えられた</string>
+    <string name="dellcont">書直し接触およびメッセージ</string>
+    <string name="updated_string">Kontakt Plusローディング データ</string>
+    <string name="updated_string2">Kontakt Plusローディング データ</string>
+    <string name="send_contacts">メモ帳</string>
+    <string name="send_sms">SMS</string>
+    <string name="notif">通告</string>
+    <string name="save">救いなさい</string>
+    <string name="phone">電話番号</string>
+    <string name="mail">電子メール</string>
+    <string name="password">パスワード</string>
+    <string name="registration">登録</string>
+    <string name="ok">わかりました</string>
+    <string name="response">答え</string>
+    <string name="not_all">すべてのデータを満たさなかった</string>
+    <string name="atorize_error">間違い!</string>
+    <string name="finished">完了するローディング</string>
+    <string name="email間違い">電子メール</string>
+    <string name="warning_loading">注意の間違い!</string>
+    <string name="update_string">ローディングは始まった</string>
+    <string name="were_added">接触は加えられた</string>
+    <string name="sms_were_added">smsは加えられた</string>
+
+
+
+
+    <string-array name="langs">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Română</item>
+        <item>Український</item>
+        <item>日本語</item>
+        <item>Dutch</item>
+        <item>Espaniol</item>
+    </string-array>
+</resources>
